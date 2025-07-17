@@ -13,6 +13,11 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Return from './pages/Return';
 import Shipping from './pages/Shipping';
+import Thankyou from './pages/Thankyou';
+import Six from './components/Six';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 
 
 
@@ -21,13 +26,13 @@ const PromoBanner = () => {
     <div className="w-full bg-[#5d3c77] text-white py-2 overflow-hidden">
       <div className="animate-marquee whitespace-nowrap text-sm sm:text-base font-semibold tracking-wide">
         <span className="mx-10">
-          🎉 First 100 Orders Get 1-Day Delivery + FREE Shipping. Order Fast – Limited Offer!
+          First 100 Orders Get 1-Day Delivery + FREE Shipping. Order Fast – Limited Offer!
         </span>
         <span className="mx-10">
-          🎉 First 100 Orders Get 1-Day Delivery + FREE Shipping. Order Fast – Limited Offer!
+          First 100 Orders Get 1-Day Delivery + FREE Shipping. Order Fast – Limited Offer!
         </span>
         <span className="mx-10">
-          🎉 First 100 Orders Get 1-Day Delivery + FREE Shipping. Order Fast – Limited Offer!
+          First 100 Orders Get 1-Day Delivery + FREE Shipping. Order Fast – Limited Offer!
         </span>
       </div>
     </div>
@@ -44,6 +49,7 @@ function Home() {
       <Three />
       <Four />
       <Five />
+      <Six />
     </div>
   )
 }
@@ -59,8 +65,9 @@ function App() {
           <Route path="/cancellation" element={<Cancellation />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
-          <Route path="/return" element={<Return />} />
+          <Route path="/returns" element={<Return />} />
           <Route path="/shipping" element={<Shipping />} />
+          <Route path="/thank-you" element={<Thankyou />} />
         </Routes>
         <Footer />
       </BrowserRouter>

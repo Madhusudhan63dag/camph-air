@@ -1,8 +1,11 @@
 import React from 'react'
+import image from '../assets/banner4.webp'
 
 const Four = () => {
   return (
-    <div>Four</div>
+    <div id="usage">
+      <img src={image} alt="Banner" />
+    </div>
   )
 }
 

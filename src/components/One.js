@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import banner1 from '../assets/banner.png'; // Replace with different banner if needed
+import banner1 from '../assets/banner1.webp';
+import banner2 from '../assets/banner2.webp';
+import banner3 from '../assets/banner3.webp';
+
+import banner5 from '../assets/banner5.webp';
+import banner6 from '../assets/banner6.webp';
 
 const One = () => {
   const banners = [
+    banner6,
     banner1,
-    banner1, // Add another image here later
+    banner2,
+    banner3,
+    banner5,
   ];
 
   const [current, setCurrent] = useState(0);

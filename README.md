@@ -1,10 +1,65 @@
-# Getting Started with Create React App
+# Camph Air - E-commerce React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a React-based e-commerce application for Camph Air products with integrated API backend.
+
+## Prerequisites
+
+Make sure you have the following installed:
+- Node.js (v14 or higher)
+- npm or yarn
+
+## Setup Instructions
+
+### 1. Environment Configuration
+
+Create a `.env` file in the root directory:
+```
+REACT_APP_API_URL=http://localhost:5000
+```
+
+### 2. Backend API Setup
+
+First, start the backend API:
+```bash
+cd d:\ISN\camph\camph-air_api
+npm install
+npm start
+```
+
+The API will run on `http://localhost:5000`
+
+### 3. Frontend Setup
+
+In the project directory, install dependencies and start the development server:
+```bash
+npm install
+npm start
+```
+
+The app will run on `http://localhost:3000`
+
+## API Integration
+
+The application integrates with the following API endpoints:
+
+- **POST /send-email** - Send contact form emails
+- **POST /send-order-confirmation** - Send order confirmation emails  
+- **POST /send-abandoned-order-email** - Send abandoned cart emails
+- **POST /create-order** - Create Razorpay orders
+- **POST /verify-payment** - Verify Razorpay payments
+
+## Features
+
+- Product catalog with detailed views
+- Shopping cart functionality
+- Checkout process with form validation
+- Payment integration with Razorpay
+- Cash on Delivery (COD) support
+- Order confirmation emails
+- Abandoned cart recovery emails
+- Responsive design
 
 ## Available Scripts
-
-In the project directory, you can run:
 
 ### `npm start`
 

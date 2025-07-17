@@ -18,11 +18,11 @@ const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-4">Explore</h4>
           <ul className="space-y-2 text-sm text-gray-700">
-            <li><a href="#banner" className="hover:text-[#5d3c77]">Overview</a></li>
-            <li><a href="#products" className="hover:text-[#5d3c77]">How It Works</a></li>
-            <li><a href="#flavours" className="hover:text-[#5d3c77]">Fragrance Types</a></li>
-            <li><a href="#usage" className="hover:text-[#5d3c77]">Usage Areas</a></li>
-            <li><a href="#comparison" className="hover:text-[#5d3c77]">Why Choose Us</a></li>
+            <li><a href="/#banner" className="hover:text-[#5d3c77]">Overview</a></li>
+            <li><a href="/#products" className="hover:text-[#5d3c77]">How It Works</a></li>
+            <li><a href="/#flavours" className="hover:text-[#5d3c77]">Fragrance Types</a></li>
+            <li><a href="/#usage" className="hover:text-[#5d3c77]">Usage Areas</a></li>
+            <li><a href="/#comparison" className="hover:text-[#5d3c77]">Why Choose Us</a></li>
           </ul>
         </div>
 
