@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="md:col-span-1">
           <img src={logo} alt="Camph Airr" className="h-20 mb-4" />
           <p className="text-sm leading-relaxed text-gray-700 max-w-xs">
-            Discover the natural power of camphor with a modern twist. Our fragrance drops purify your air, uplift your mood, and create calming energy — anytime, anywhere.
+            Elevate your space and soul with Camph Airr — where time-honored camphor meets thoughtful, modern formulation.
           </p>
         </div>
 
@@ -41,8 +41,8 @@ const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-4">Get in Touch</h4>
           <ul className="text-sm text-gray-700 space-y-2">
-            <li>Email: <a href="mailto:support@camphairr.com" className="hover:text-[#5d3c77]">support@camphairr.com</a></li>
-            <li>Phone: +91-9876543210</li>
+            <li>Email: <a href="mailto:support@camphairr.com" className="hover:text-[#5d3c77]">customercareproductcenter@gmail.com</a></li>
+            <li>Phone: +91-9392277389</li>
             <li>Address: Hyderabad, India</li>
           </ul>
         </div>

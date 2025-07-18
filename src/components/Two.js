@@ -11,7 +11,14 @@ import originalLemongrass from '../assets/combo/2.webp';
 import originalSandalwood from '../assets/combo/3.webp';
 import originalJasmine from '../assets/combo/4.webp';
 
-import combo4Image from '../assets/single/5.webp';
+// combo of 3 
+import combo from '../assets/combo/5.webp';
+import combo1 from '../assets/combo/6.webp';
+import combo2 from '../assets/combo/7.webp';
+import combo3 from '../assets/combo/8.webp';
+import combo4 from '../assets/combo/9.webp';
+
+import combo4Image from '../assets/combo/10.webp';
 
 
 const comboImages = {
@@ -19,6 +26,15 @@ const comboImages = {
   'Original + Lemongrass': [originalLemongrass, originalLemongrass],
   'Original + Sandalwood': [originalSandalwood, originalSandalwood],
   'Original + Jasmine': [originalJasmine, originalJasmine],
+};
+
+// Combo of 3 images mapping
+const threePackImages = {
+  'Lavender + Original + Lemongrass': [combo, combo],
+  'Original + Sandalwood + Jasmine': [combo1, combo1],
+  'Sandalwood + Original + Lavender': [combo2, combo2],
+  'Original + Jasmine + Lemongrass': [combo3, combo3],
+  'Original + Jasmine + Lavender': [combo4, combo4],
 };
 
 const flavorImages = {
@@ -144,7 +160,17 @@ const generateCards = (packs, stockLeft) => {
     const name = combo.join(' + ');
     const price = combo.reduce((total, f) => total + flavorPrices[f], 0);
     const mrp = combo.reduce((total, f) => total + flavorMRPs[f], 0);
-    const displayImage = comboImages[name] || flavorImages[combo[0]];
+    
+    // For three-pack combinations, use specific combo images
+    let displayImage;
+    if (combo.length === 3) {
+      // Use specific images for three-pack combinations
+      displayImage = threePackImages[name] || flavorImages[combo[0]];
+    } else {
+      // For single and two-pack combinations, use existing logic
+      displayImage = comboImages[name] || flavorImages[combo[0]];
+    }
+    
     const showUrgency = index % 3 === 0;
 
     return (
@@ -423,19 +449,15 @@ const DisplayCards = () => {
   const visibleTwoPacks = showMoreTwos ? twoPacks : twoPacks.slice(0, 4);
   const cards = [singlePacks, twoPacks];
   const visibleSinglePacks = showMoreSingles ? cards : cards.slice(0, 4); // Show 4 initially
-  function getThreeCombosWithOriginal(allFlavors) {
-    const others = allFlavors.filter(f => f !== 'Original');
-    const combos = [];
-
-    for (let i = 0; i < others.length; i++) {
-      for (let j = i + 1; j < others.length; j++) {
-        combos.push(['Original', others[i], others[j]]);
-      }
-    }
-
-    return combos;
-  }
-  const threePacks = getThreeCombosWithOriginal(flavors);
+  
+  // Specific three-flavor combinations as requested
+  const threePacks = [
+    ['Lavender', 'Original', 'Lemongrass'],
+    ['Original', 'Sandalwood', 'Jasmine'],
+    ['Sandalwood', 'Original', 'Lavender'],
+    ['Original', 'Jasmine', 'Lemongrass'],
+    ['Original', 'Jasmine', 'Lavender']
+  ];
   const visibleThreePacks = showMoreThrees ? threePacks : threePacks.slice(0, 3);
 
   return (

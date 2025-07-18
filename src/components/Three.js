@@ -1,9 +1,9 @@
 import React from 'react';
-import lavenderImg from '../assets/28.webp';
-import jasmineImg from '../assets/28.webp';
-import lemongrassImg from '../assets/28.webp';
-import sandalwoodImg from '../assets/28.webp';
-import originalImg from '../assets/28.webp';
+import lavenderImg from '../assets/combo/12.webp';
+import jasmineImg from '../assets/combo/14.webp';
+import lemongrassImg from '../assets/combo/14.webp';
+import sandalwoodImg from '../assets/combo/13.webp';
+import originalImg from '../assets/combo/15.webp';
 
 const fragranceDetails = [
   {
