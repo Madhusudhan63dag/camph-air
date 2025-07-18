@@ -87,7 +87,7 @@ const FragranceCarousel = () => (
         >
           {/* Decorative Circle */}
           <span 
-            className="absolute -top-8 -right-8 w-40 h-32 bg-opacity-20 bg-white rounded-full blur-2xl pointer-events-none"
+            className="absolute -top-8 -right-8 w-[500px] bg-opacity-20 bg-white rounded-full blur-2xl pointer-events-none"
             aria-hidden="true"
           />
           {/* Product Image */}

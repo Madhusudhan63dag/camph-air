@@ -60,9 +60,9 @@ const SpecialComboOffer = ({ navigate }) => {
   return (
     <div className="">
       <img src={banner} alt="Special Combo Offer" className="w-full" />
-      <div className='flex flex-col-reverse md:flex-row items-center gap-10 px-6 py-16 rounded-xl'>
+      <div className=''>
         {/* Content */}
-        <div className="md:w-1/2 text-center md:text-left">
+        <div className="md:w-full text-left">
           <h2 className="text-3xl md:text-4xl font-bold text-[#5d3c77] mb-4">
             New Combo Pack
           </h2>
@@ -85,15 +85,6 @@ const SpecialComboOffer = ({ navigate }) => {
             >
             Grab This Combo Now
           </button>
-        </div>
-
-        {/* Image */}
-        <div className="md:w-1/2 flex justify-center">
-          <img
-            src={combo4Image}
-            alt="Special Combo Offer"
-            className=""
-          />
         </div>
       </div>
     </div>
@@ -157,62 +148,55 @@ const generateCards = (packs) => {
     }
     return (
       <div
-        key={index}
-        className="rounded-3xl overflow-hidden shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group bg-white"
-      >
-        {/* Image Section */}
-        <div className="relative h-[350px] w-full">
-          <img
-            src={displayImage[0]}
-            alt={name}
-            className="absolute inset-0 w-full h-full  transition-opacity duration-500 group-hover:opacity-0"
-          />
-          <img
-            src={displayImage[1]}
-            alt={name}
-            className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          />
-        </div>
-        {/* Text Section */}
-        <div className="p-5 text-center flex flex-col justify-between min-h-[150px]">
-          <div>
-            <h3 className="text-xl font-bold text-[#5d3c77] mb-1">{name} {combo.length > 1 ? 'Combo' : ''}</h3>
-            <div className="text-gray-400 text-sm line-through">MRP ₹{mrp}</div>
-            <div className="text-green-600 font-semibold text-xl">Now ₹{price}</div>
-          </div>
-          <button
-            onClick={() => {
-              let cart = JSON.parse(localStorage.getItem('cart')) || [];
-              const newItem = { name, price, combo, id: Date.now() };
-              cart.push(newItem);
-              localStorage.setItem('cart', JSON.stringify(cart));
-              window.dispatchEvent(new CustomEvent('cartUpdated'));
-              const button = document.activeElement;
-              const originalText = button.textContent;
-              button.textContent = 'Added!';
-              button.style.backgroundColor = '#10b981';
-              setTimeout(() => {
-                button.textContent = originalText;
-                button.style.backgroundColor = '';
-              }, 1000);
-            }}
-            className="mt-4 bg-[#5d3c77] hover:bg-[#472c5d] text-white text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200"
-          >
-            Add to Cart
-          </button>
-        </div>
-      </div>
+  key={index}
+  className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200 bg-white hover:shadow-3xl transition-transform duration-300 hover:-translate-y-2 group flex flex-col items-center"
+  style={{ width: 380, maxWidth: '100%' }}
+>
+  {/* Image Section */}
+  <div className="flex justify-center items-center w-full bg-gradient-to-br from-purple-50 to-white mb-2">
+    <div className="w-full max-w-[400px] aspect-square relative">
+      <img
+        src={displayImage[0]}
+        alt={name}
+        className="rounded-2xl w-full h-full object-cover shadow-lg transition-opacity duration-500 group-hover:opacity-0"
+        style={{ border: "4px solid #ece9ff", background: "#fff" }}
+      />
+      <img
+        src={displayImage[1]}
+        alt={name}
+        className="rounded-2xl w-full h-full object-cover shadow-lg transition-opacity duration-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100"
+        style={{ border: "4px solid #ece9ff", background: "#fff" }}
+      />
+    </div>
+  </div>
+  {/* Text Section */}
+  <div className="px-7 pt-4 pb-5 flex flex-col flex-1 items-center w-full">
+    <h3 className="text-xl font-extrabold text-[#5d3c77] mb-1 tracking-tight text-center">
+      {name}{combo.length > 1 ? ' Combo' : ''}
+    </h3>
+    <div className="text-gray-400 text-sm line-through mb-1">MRP ₹{mrp}</div>
+    <div className="text-green-600 font-bold text-2xl mb-2">Now ₹{price}</div>
+    <button
+      // onClick={/* ... */}
+      className="mt-4 bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] hover:from-[#472c5d] hover:to-[#3a2248] text-white text-base font-semibold px-6 py-2 rounded-full shadow transition-all duration-200"
+    >
+      Add to Cart
+    </button>
+  </div>
+</div>
+
     );
   });
 };
+
+
 
 const DisplayCards = () => {
   const navigate = useNavigate();
   const [stockLeft, setStockLeft] = useState(0);
   const [timeLeft, setTimeLeft] = useState('');
   const [showMoreSingles, setShowMoreSingles] = useState(false);
-  const [showMoreTwos, setShowMoreTwos] = useState(false);
-  const [showMoreThrees, setShowMoreThrees] = useState(false);
+  const [showMoreCombos, setShowMoreCombos] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
 
@@ -300,13 +284,13 @@ const DisplayCards = () => {
 
   // Prepare data for each category
   const singlePacks = [['Original'], ['Lavender'], ['Lemongrass'], ['Sandalwood'], ['Jasmine']];
-  const twoPacks = [
+  const mixedCombos = [
+    // Two-pack combos
     [flavors[3], flavors[0]], // Original + Lavender
     [flavors[3], flavors[1]], // Original + Lemongrass
     [flavors[3], flavors[2]], // Original + Sandalwood
     [flavors[3], flavors[4]], // Original + Jasmine
-  ];
-  const threePacks = [
+    // Three-pack combos
     ['Lavender', 'Original', 'Lemongrass'],
     ['Original', 'Sandalwood', 'Jasmine'],
     ['Sandalwood', 'Original', 'Lavender'],
@@ -347,52 +331,34 @@ const DisplayCards = () => {
       {/* Single */}
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Single Pack</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 3))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
+          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 4))}
         </div>
-        {singlePacks.length > 3 && (
+        {singlePacks.length > 4 && (
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setShowMoreSingles(!showMoreSingles)}
               className="px-6 py-2 bg-[#5d3c77] hover:bg-[#472c5d] text-white font-semibold rounded-full transition shadow-md"
             >
-              {showMoreSingles ? 'View Less' : 'View All Singles'}
+              {showMoreSingles ? 'View Less' : 'View All'}
             </button>
           </div>
         )}
       </div>
 
-      {/* Combo of 2 */}
+      {/* Combo Mix */}
       <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Combo of Two</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {showMoreTwos ? generateCards(twoPacks) : generateCards(twoPacks.slice(0, 3))}
+        <h2 className="text-2xl font-bold text-center mb-6">Combo Mix</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
+          {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 4))}
         </div>
-        {twoPacks.length > 3 && (
+        {mixedCombos.length > 4 && (
           <div className="flex justify-center mt-4">
             <button
-              onClick={() => setShowMoreTwos(!showMoreTwos)}
+              onClick={() => setShowMoreCombos(!showMoreCombos)}
               className="px-6 py-2 bg-[#5d3c77] hover:bg-[#472c5d] text-white font-semibold rounded-full transition shadow-md"
             >
-              {showMoreTwos ? 'View Less' : 'View All Combos of Two'}
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Combo of 3 */}
-      <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Combo of Three</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {showMoreThrees ? generateCards(threePacks) : generateCards(threePacks.slice(0, 3))}
-        </div>
-        {threePacks.length > 3 && (
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => setShowMoreThrees(!showMoreThrees)}
-              className="px-6 py-2 bg-[#5d3c77] hover:bg-[#472c5d] text-white font-semibold rounded-full transition shadow-md"
-            >
-              {showMoreThrees ? 'View Less' : 'View All Combos of Three'}
+              {showMoreCombos ? 'View Less' : 'View All Combos'}
             </button>
           </div>
         )}
