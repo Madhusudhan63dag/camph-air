@@ -177,7 +177,21 @@ const generateCards = (packs) => {
     <div className="text-gray-400 text-sm line-through mb-1">MRP ₹{mrp}</div>
     <div className="text-green-600 font-bold text-2xl mb-2">Now ₹{price}</div>
     <button
-      // onClick={/* ... */}
+       onClick={() => {
+              let cart = JSON.parse(localStorage.getItem('cart')) || [];
+              const newItem = { name, price, combo, id: Date.now() };
+              cart.push(newItem);
+              localStorage.setItem('cart', JSON.stringify(cart));
+              window.dispatchEvent(new CustomEvent('cartUpdated'));
+              const button = document.activeElement;
+              const originalText = button.textContent;
+              button.textContent = 'Added!';
+              button.style.backgroundColor = '#10b981';
+              setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+              }, 1000);
+            }}
       className="mt-4 bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] hover:from-[#472c5d] hover:to-[#3a2248] text-white text-base font-semibold px-6 py-2 rounded-full shadow transition-all duration-200"
     >
       Add to Cart
