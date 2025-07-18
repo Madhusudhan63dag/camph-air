@@ -1222,12 +1222,6 @@ const onPaymentSuccess = async (order) => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-['Poppins',sans-serif]">
             <style>{fontStyles}</style>
-
-            {/* Centered Logo */}
-            <div className="flex justify-center items-center">
-                <img src={logo} alt="Logo" className="" />
-            </div>
-
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <p className='my-5 font-medium text-gray-700 ml-10 tracking-wide'>Enjoy 100% natural products with free delivery.</p>
                 
