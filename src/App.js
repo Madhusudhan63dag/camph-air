@@ -2,6 +2,7 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 import One from './components/One';
 import Two from './components/Two';
 import Three from './components/Three';
@@ -60,6 +61,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollToTop />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

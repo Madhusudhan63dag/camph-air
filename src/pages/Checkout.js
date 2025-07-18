@@ -41,9 +41,6 @@ const generateOrderNumber = () => {
     return `CA-${timestamp}-${random}`;
 };
 
-// Add Google Fonts import to index.html or add this at the top of your component
-// This ensures the component uses better fonts
-
 const fontStyles = `
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -1114,6 +1111,9 @@ const onPaymentSuccess = async (order) => {
     };
 
     useEffect(() => {
+        // Scroll to top when component mounts
+        window.scrollTo(0, 0);
+        
         if (location.state) {
             console.log("Received from product page:", location.state);
         }
