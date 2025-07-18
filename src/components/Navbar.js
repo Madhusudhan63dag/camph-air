@@ -56,7 +56,7 @@ const Navbar = () => {
             <img
               src={logo}
               alt="Camph Airr Logo"
-              className="h-16"
+              className="h-32"
             />
           </a>
 
