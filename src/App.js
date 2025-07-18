@@ -46,7 +46,9 @@ function Home() {
       <One />
       <PromoBanner />
       <Two />
-      <Three />
+      <div className='overflow-hidden'>
+        <Three />
+      </div>
       <Four />
       <Five />
       <Six />

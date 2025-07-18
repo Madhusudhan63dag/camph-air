@@ -1,5 +1,5 @@
 import React from 'react'
-import image from '../assets/banner4.webp'
+import image from '../assets/banner2.webp'
 
 const Four = () => {
   return (
