@@ -23,28 +23,12 @@ const reviews = [
     stars: 5,
   },
   {
-    name: 'Dinesh Kumar',
-    location: 'Mysuru, Karnataka',
-    review: 'I used the Lemongrass one in my bathroom, and I was honestly surprised by how fresh it smelled. Also love that it naturally repels mosquitoes.',
-    image: lemongrassImg,
-    product: 'Lemongrass Fragrance',
-    stars: 4,
-  },
-  {
     name: 'Kavitha Shree',
     location: 'Hyderabad, Telangana',
     review: 'Sandalwood is such a grounding fragrance. I placed it in my meditation corner and it truly enhances the peace of the space. It’s lasting and authentic.',
     image: sandalwoodImg,
     product: 'Sandalwood Fragrance',
     stars: 5,
-  },
-  {
-    name: 'Lakshmi Nair',
-    location: 'Ernakulam, Kerala',
-    review: 'Jasmine paired with camphor is the ultimate combo. Keeps my living room smelling divine. Just open and place — no oil, no fire, no plug. Love it!',
-    image: jasmineImg,
-    product: 'Jasmine Fragrance',
-    stars: 4,
   },
   {
     name: 'Vishnu Reddy',

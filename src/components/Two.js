@@ -19,6 +19,7 @@ import combo3 from '../assets/combo/8.webp';
 import combo4 from '../assets/combo/9.webp';
 
 import combo4Image from '../assets/combo/10.webp';
+import banner from '../assets/banner6.webp';
 
 const SpecialComboOffer = ({ navigate }) => {
   
@@ -57,45 +58,47 @@ const SpecialComboOffer = ({ navigate }) => {
   };
 
   return (
-    <div className="flex flex-col-reverse md:flex-row items-center gap-10 bg-gradient-to-br from-yellow-50 to-yellow-100 px-6 py-16 rounded-xl shadow-lg my-10">
-      {/* Content */}
-      <div className="md:w-1/2 text-center md:text-left">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#5d3c77] mb-4">
-          Special Combo Offer
-        </h2>
-        <p className="text-gray-700 text-lg leading-relaxed mb-6">
-          Unlock the power of purity, calmness, and style — all in one exclusive pack. Our <strong>5-in-1 Combo</strong> features all premium fragrances including <span className="text-[#5d3c77] font-semibold">Original Camphor</span> plus four handpicked fragrances.
-          <br /><br />
-          Just <strong>open the pack</strong> and place it in your wardrobe, bathroom, car, or any room — no water, no electricity, no setup needed.
-        </p>
+    <div className="">
+      <img src={banner} alt="Special Combo Offer" className="w-full" />
+      <div className='flex flex-col-reverse md:flex-row items-center gap-10 px-6 py-16 rounded-xl'>
+        {/* Content */}
+        <div className="md:w-1/2 text-center md:text-left">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#5d3c77] mb-4">
+            New Combo Pack
+          </h2>
+          <p className="text-gray-700 text-lg leading-relaxed mb-6">
+            Unlock the power of purity, calmness, and style — all in one exclusive pack. Our <strong>5-in-1 Combo</strong> features all premium fragrances including <span className="text-[#5d3c77] font-semibold">Original Camphor</span> plus four handpicked fragrances.
+            <br /><br />
+            Just <strong>open the pack</strong> and place it in your wardrobe, bathroom, car, or any room — no water, no electricity, no setup needed.
+          </p>
 
-        <ul className="list-disc list-inside text-sm text-gray-600 mb-6 space-y-1">
-          <li>Includes All 5 Premium Fragrances</li>
-          <li>Long-lasting freshness with anti-bacterial properties</li>
-          <li>No burning, no mess — 100% safe & natural</li>
-          <li>Perfect for gifting, travel, or daily use</li>
-        </ul>
+          <ul className="list-disc list-inside text-sm text-gray-600 mb-6 space-y-1">
+            <li>Includes All 5 Premium Fragrances</li>
+            <li>Long-lasting freshness with anti-bacterial properties</li>
+            <li>No burning, no mess — 100% safe & natural</li>
+            <li>Perfect for gifting, travel, or daily use</li>
+          </ul>
 
-        <button 
-          onClick={handleGrabCombo}
-          className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition"
-        >
-          Grab This Combo Now
-        </button>
-      </div>
+          <button 
+            onClick={handleGrabCombo}
+            className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition"
+            >
+            Grab This Combo Now
+          </button>
+        </div>
 
-      {/* Image */}
-      <div className="md:w-1/2 flex justify-center">
-        <img
-          src={combo4Image}
-          alt="Special Combo Offer"
-          className="w-[300px] md:w-[450px] lg:w-[500px] rounded-2xl shadow-2xl"
-        />
+        {/* Image */}
+        <div className="md:w-1/2 flex justify-center">
+          <img
+            src={combo4Image}
+            alt="Special Combo Offer"
+            className=""
+          />
+        </div>
       </div>
     </div>
   );
 };
-
 
 const comboImages = {
   'Original + Lavender': [originalLavender, originalLavender],
@@ -139,7 +142,7 @@ const flavorMRPs = {
 
 const flavors = Object.keys(flavorImages);
 
-const generateCards = (packs, descriptionMap) => {
+const generateCards = (packs) => {
   return packs.map((combo, index) => {
     const name = combo.join(' + ');
     const price = combo.reduce((total, f) => total + flavorPrices[f], 0);
@@ -158,25 +161,22 @@ const generateCards = (packs, descriptionMap) => {
         className="rounded-3xl overflow-hidden shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group bg-white"
       >
         {/* Image Section */}
-        <div className="relative h-64 w-full">
+        <div className="relative h-[350px] w-full">
           <img
             src={displayImage[0]}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+            className="absolute inset-0 w-full h-full  transition-opacity duration-500 group-hover:opacity-0"
           />
           <img
             src={displayImage[1]}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           />
         </div>
         {/* Text Section */}
-        <div className="p-5 text-center flex flex-col justify-between min-h-[240px]">
+        <div className="p-5 text-center flex flex-col justify-between min-h-[150px]">
           <div>
             <h3 className="text-xl font-bold text-[#5d3c77] mb-1">{name} {combo.length > 1 ? 'Combo' : ''}</h3>
-            <p className="text-sm text-gray-600 mb-2">
-              {descriptionMap ? descriptionMap[combo.length] : ''}
-            </p>
             <div className="text-gray-400 text-sm line-through">MRP ₹{mrp}</div>
             <div className="text-green-600 font-semibold text-xl">Now ₹{price}</div>
           </div>
@@ -205,13 +205,6 @@ const generateCards = (packs, descriptionMap) => {
     );
   });
 };
-
-const descriptionMap = {
-  1: 'Experience a signature fragrance in every breath.',
-  2: 'Double the freshness. Perfectly paired aromas.',
-  3: 'A trio of scents for a balanced, vibrant vibe.',
-};
-
 
 const DisplayCards = () => {
   const navigate = useNavigate();
@@ -306,7 +299,7 @@ const DisplayCards = () => {
   };
 
   // Prepare data for each category
-  const singlePacks = flavors.map((f) => [f]);
+  const singlePacks = [['Original'], ['Lavender'], ['Lemongrass'], ['Sandalwood'], ['Jasmine']];
   const twoPacks = [
     [flavors[3], flavors[0]], // Original + Lavender
     [flavors[3], flavors[1]], // Original + Lemongrass
@@ -328,7 +321,7 @@ const DisplayCards = () => {
       </div>
       {showPopup && (
         <div className="fixed z-10 bottom-6 right-6 max-w-xs bg-white border border-purple-300 shadow-xl p-4 rounded-2xl animate-bounce-in">
-          <div className="text-[#5d3c77] font-bold text-lg mb-1"> Select Combo of 5 </div>
+          <div className="text-[#5d3c77] font-bold text-lg mb-1"> Select Your Own combo </div>
           <p className="text-sm text-gray-700 mb-2">
             Get all 5 fragrances for just <span className="font-semibold text-green-600">₹1399</span>. Limited stock available!
           </p>
@@ -355,7 +348,7 @@ const DisplayCards = () => {
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Single Pack</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {showMoreSingles ? generateCards(singlePacks, descriptionMap) : generateCards(singlePacks.slice(0, 3), descriptionMap)}
+          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 3))}
         </div>
         {singlePacks.length > 3 && (
           <div className="flex justify-center mt-4">
@@ -373,7 +366,7 @@ const DisplayCards = () => {
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Combo of Two</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {showMoreTwos ? generateCards(twoPacks, descriptionMap) : generateCards(twoPacks.slice(0, 3), descriptionMap)}
+          {showMoreTwos ? generateCards(twoPacks) : generateCards(twoPacks.slice(0, 3))}
         </div>
         {twoPacks.length > 3 && (
           <div className="flex justify-center mt-4">
@@ -381,7 +374,7 @@ const DisplayCards = () => {
               onClick={() => setShowMoreTwos(!showMoreTwos)}
               className="px-6 py-2 bg-[#5d3c77] hover:bg-[#472c5d] text-white font-semibold rounded-full transition shadow-md"
             >
-              {showMoreTwos ? 'View Less' : 'View All Combos of 2'}
+              {showMoreTwos ? 'View Less' : 'View All Combos of Two'}
             </button>
           </div>
         )}
@@ -391,7 +384,7 @@ const DisplayCards = () => {
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Combo of Three</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {showMoreThrees ? generateCards(threePacks, descriptionMap) : generateCards(threePacks.slice(0, 3), descriptionMap)}
+          {showMoreThrees ? generateCards(threePacks) : generateCards(threePacks.slice(0, 3))}
         </div>
         {threePacks.length > 3 && (
           <div className="flex justify-center mt-4">
@@ -399,7 +392,7 @@ const DisplayCards = () => {
               onClick={() => setShowMoreThrees(!showMoreThrees)}
               className="px-6 py-2 bg-[#5d3c77] hover:bg-[#472c5d] text-white font-semibold rounded-full transition shadow-md"
             >
-              {showMoreThrees ? 'View Less' : 'View All Combos of 3'}
+              {showMoreThrees ? 'View Less' : 'View All Combos of Three'}
             </button>
           </div>
         )}

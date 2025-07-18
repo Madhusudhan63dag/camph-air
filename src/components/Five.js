@@ -27,10 +27,6 @@ const Five = () => {
                     <td className="px-4 py-3">Lavender, Jasmine, Lemongrass, Sandalwood, Original</td>
                   </tr>
                   <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Form</td>
-                    <td className="px-4 py-3">Liquid Drops</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
                     <td className="px-4 py-3 font-semibold">Primary Ingredient</td>
                     <td className="px-4 py-3">100% Natural Camphor & Essential Oils</td>
                   </tr>
@@ -59,16 +55,13 @@ const Five = () => {
           <div className="lg:w-1/2 w-full flex flex-col justify-between">
             {/* Overview */}
             <div className="mb-8">
-              <h3 className="text-xl font-semibold text-[#5d3c77] mb-3">
+              <h3 className="text-2xl font-bold text-[#5d3c77] mb-4">
                 What Makes Camph Airr Special?
               </h3>
               <p className="text-gray-700 text-base leading-relaxed">
-                Camph Airr brings you the perfect fusion of ancient wellness and modern living. Each drop of our
-                camphor-based fragrance blend is thoughtfully formulated to detoxify your air, relax your senses,
-                and awaken your space with nature’s own purity.
+                Camph Airr is inspired by the pure essence of camphor—a natural aromatic known for its air-purifying, calming, and revitalizing properties. Revered for generations, camphor cleanses environments, dispels negativity, and introduces a refreshing sense of clarity and tranquility into any space.
                 <br /><br />
-                Whether you need to unwind, focus, meditate, or simply freshen up a room — Camph Airr is your
-                go-to natural solution for daily aromatherapy, free from harsh chemicals or overpowering scents.
+                Its gentle fragrance not only uplifts your mood but also helps maintain a clean and serene atmosphere throughout your home, workspace, or sacred places. Free from harsh additives, Camph Airr brings the authentic power of camphor into daily living for true well-being and peace of mind.
               </p>
             </div>
 
