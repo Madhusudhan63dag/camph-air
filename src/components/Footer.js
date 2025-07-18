@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="md:col-span-1">
           <img src={logo} alt="Camph Airr" className="h-20 mb-4" />
           <p className="text-sm leading-relaxed text-gray-700 max-w-xs">
-            Elevate your space and soul with Camph Airr — where time-honored camphor meets thoughtful, modern formulation.
+            Breathe easy with Camph Airr – pure camphor aromatherapy for every space. Naturally cleanse your air and elevate your senses, one drop at a time.
           </p>
         </div>
 
