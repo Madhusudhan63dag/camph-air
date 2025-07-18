@@ -917,7 +917,7 @@ const DisplayCards = () => {
 
       {/* Combo of 2 */}
       <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Combo of 2</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Combo of Two</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {showMoreTwos ? generateCards(twoPacks, descriptionMap) : generateCards(twoPacks.slice(0, 3), descriptionMap)}
         </div>
@@ -935,7 +935,7 @@ const DisplayCards = () => {
 
       {/* Combo of 3 */}
       <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Combo of 3</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Combo of Three</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {showMoreThrees ? generateCards(threePacks, descriptionMap) : generateCards(threePacks.slice(0, 3), descriptionMap)}
         </div>
