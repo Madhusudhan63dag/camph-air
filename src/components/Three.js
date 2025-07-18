@@ -366,7 +366,7 @@ const FragranceCarousel = () => (
     {fragranceDetails.map((item) => (
       <div key={item.name} className="px-5 overflow-hidden py-12">
         <div
-          className={`relative bg-gradient-to-br ${item.color} border ${item.border} ${item.shadow} rounded-3xl group hover:scale-105 hover:shadow-2xl transition-transform duration-300`}
+          className={`relative bg-gradient-to-br ${item.color} border ${item.border} ${item.shadow} rounded-3xl group hover:scale-105 transition-transform duration-300`}
         >
           {/* Decorative Circle */}
           <span 

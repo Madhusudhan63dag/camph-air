@@ -8,12 +8,14 @@ import banner6 from '../assets/banner6.webp';
 // Import mobile-specific banners
 import banner1Mobile from '../assets/banner1-mobile.webp';
 import banner2Mobile from '../assets/banner2-mobile.webp';
+import banner3Mobile from '../assets/banner3-mobile.webp';
+import banner5Mobile from '../assets/banner5-mobile.webp';
 
 const MOBILE_BREAKPOINT = 768; // px (adjust as needed)
 
 const One = () => {
   const bannersDesktop = [banner1, banner6, banner2, banner3, banner5];
-  const bannersMobile = [banner1Mobile, banner2Mobile];
+  const bannersMobile = [banner1Mobile, banner2Mobile, banner3Mobile, banner5Mobile];
 
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
