@@ -33,7 +33,7 @@ const reviews = [
   {
     name: 'Vishnu Reddy',
     location: 'Vijayawada, Andhra Pradesh',
-    review: 'I ordered the original scent combo for my wardrobe. Every time I open it, I get a refreshing wave of purity. Also, my clothes don’t smell musty anymore!',
+    review: 'I ordered the original camphor for my bedroom. Every time I enter, I get a refreshing wave of purity. Also, my clothes don’t smell musty anymore! feel fresh and clean.',
     image: originalImg,
     product: 'Original Fragrance',
     stars: 5,

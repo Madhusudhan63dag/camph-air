@@ -11,9 +11,9 @@ import Cart from './Cart';
 const icons = {
   banner: one,
   products: five,
-  flavours: three,
-  usage: four,
-  comparison: two,
+  // flavours: three,
+  new: four,
+  about: two,
   cart: six,
 };
 
@@ -42,9 +42,8 @@ const Navbar = () => {
   const links = [
     { id: 'banner', label: 'Home' },
     { id: 'products', label: 'Products' },
-    { id: 'flavours', label: 'Fragrance' },
-    { id: 'usage', label: 'Where to Use' },
-    { id: 'comparison', label: 'Why Us?' },
+    { id: 'new', label: 'What\'s New' },
+    { id: 'about', label: 'About Us' },
   ];
 
   return (

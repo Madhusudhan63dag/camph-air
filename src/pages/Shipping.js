@@ -62,8 +62,8 @@ const Shipping = () => {
 
       <h2 className="text-xl font-semibold mb-2">12. Customer Support</h2>
       <p className="mb-4">
-        Email: <a href="mailto:israelitesshopping171@gmail.com" className="text-blue-600 underline">israelitesshopping171@gmail.com</a><br />
-        Phone: 9908 016 333<br />
+        Email: <a href="mailto:customercareproductcenter@gmail.com" className="text-blue-600 underline">customercareproductcenter@gmail.com</a><br />
+        Phone: +91-93922 77389<br />
         Response time: Within 4 business hours during operational hours.
       </p>
 

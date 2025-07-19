@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaLock, FaShieldAlt, FaCreditCard, FaCheckCircle, FaRegCreditCard } from 'react-icons/fa';
 import { SiRazorpay } from 'react-icons/si';
-import logo from '../assets/banner6.webp';
 
 // API Configuration
 const API_BASE_URL = "https://camph-air-api.onrender.com" || 'http://localhost:5000';
+
+// https://camph-air-api.onrender.com
 
 // Helper function for API calls with error handling
 const apiCall = async (endpoint, options = {}) => {
@@ -40,11 +41,6 @@ const generateOrderNumber = () => {
     const random = Math.random().toString(36).substr(2, 4).toUpperCase();
     return `CA-${timestamp}-${random}`;
 };
-
-const fontStyles = `
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-`;
 
 const SHIPPING_CHARGE = 0; // Updated to INR
 
@@ -289,6 +285,88 @@ const COUNTRIES = [
     { code: "ZW", name: "Zimbabwe" }
 ];
 
+// Indian Cities List
+const INDIAN_CITIES = [
+    "Agra", "Ahmedabad", "Ajmer", "Aligarh", "Allahabad", "Amritsar", "Aurangabad", "Bareilly", "Belgaum", "Bhavnagar",
+    "Bhopal", "Bhubaneswar", "Bikaner", "Bokaro Steel City", "Chandigarh", "Chennai", "Coimbatore", "Cuttack", "Dehradun", "Delhi",
+    "Dhanbad", "Durg", "Durgapur", "Erode", "Faridabad", "Firozabad", "Ghaziabad", "Gorakhpur", "Gulbarga", "Guntur",
+    "Guwahati", "Gwalior", "Hubli", "Hyderabad", "Indore", "Jabalpur", "Jaipur", "Jalandhar", "Jammu", "Jamnagar",
+    "Jamshedpur", "Jhansi", "Jodhpur", "Kakinada", "Kannur", "Kanpur", "Kochi", "Kolhapur", "Kolkata", "Kota",
+    "Kozhikode", "Kurnool", "Lucknow", "Ludhiana", "Madurai", "Malappuram", "Mangalore", "Mathura", "Meerut", "Moradabad",
+    "Mumbai", "Mysore", "Nagpur", "Nanded", "Nashik", "Nellore", "New Delhi", "Noida", "Patna", "Pondicherry",
+    "Pune", "Raipur", "Rajkot", "Ranchi", "Rourkela", "Salem", "Sangli", "Shimla", "Siliguri", "Solapur",
+    "Srinagar", "Surat", "Thiruvananthapuram", "Thrissur", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Ujjain", "Vadodara", "Varanasi",
+    "Vasai-Virar", "Vijayawada", "Visakhapatnam", "Warangal", "Agartala", "Aizawl", "Itanagar", "Dispur", "Patna", "Raipur",
+    "Panaji", "Gandhinagar", "Chandigarh", "Shimla", "Srinagar", "Ranchi", "Bengaluru", "Thiruvananthapuram", "Bhopal", "Imphal",
+    "Shillong", "Kohima", "Bhubaneswar", "Chandigarh", "Jaipur", "Gangtok", "Chennai", "Hyderabad", "Agartala", "Lucknow",
+    "Kolkata", "Dehradun", "Abohar", "Adilabad", "Adoni", "Agar", "Agartala", "Agra", "Ahmadnagar", "Ahmadpur East",
+    "Ahmedabad", "Ahmedgarh", "Ahmednagar", "Aizawl", "Ajmer", "Akola", "Alappuzha", "Aligarh", "Alipurduar", "Alirajpur",
+    "Allahabad", "Almora", "Alwar", "Ambala", "Ambattur", "Ambedkar Nagar", "Ambikapur", "Amravati", "Amreli", "Amritsar",
+    "Amroha", "Anand", "Anantapur", "Anantnag", "Angul", "Anjaw", "Anuppur", "Araria", "Aravalli", "Ariyalur",
+    "Arwal", "Asansol", "Ashok Nagar", "Auraiya", "Aurangabad", "Azamgarh", "Badgam", "Bagalkot", "Bageshwar", "Bagpat",
+    "Bahraich", "Baksa", "Balaghat", "Balangir", "Balasore", "Ballia", "Balrampur", "Banaskantha", "Banda", "Bandipora",
+    "Bangalore", "Banka", "Bankura", "Banswara", "Barabanki", "Baramulla", "Baran", "Bardhaman", "Bareilly", "Bargarh",
+    "Barmer", "Barnala", "Barpeta", "Barwani", "Bastar", "Basti", "Bathinda", "Beawar", "Beed", "Begusarai",
+    "Belgaum", "Bellary", "Bemetara", "Betul", "Bhadrak", "Bhagalpur", "Bhandara", "Bharatpur", "Bharuch", "Bhavnagar",
+    "Bhilwara", "Bhind", "Bhiwani", "Bhojpur", "Bhopal", "Bidar", "Bijapur", "Bijnor", "Bikaner", "Bilaspur",
+    "Birbhum", "Bishnupur", "Bokaro", "Bongaigaon", "Botad", "Boudh", "Budaun", "Bulandshahr", "Buldhana", "Bundi",
+    "Burhanpur", "Buxar", "Cachar", "Central Delhi", "Chamarajanagar", "Chamba", "Chamoli", "Champawat", "Champhai", "Chandauli",
+    "Chandel", "Chandigarh", "Chandrapur", "Changlang", "Chatra", "Chennai", "Chhatarpur", "Chhindwara", "Chikkaballapur", "Chikkamagaluru",
+    "Chirang", "Chitradurga", "Chitrakoot", "Chittoor", "Chittorgarh", "Churachandpur", "Churu", "Coimbatore", "Cooch Behar", "Cuddalore",
+    "Cuttack", "Dadra and Nagar Haveli", "Dahod", "Dakshin Dinajpur", "Dakshina Kannada", "Daman", "Damoh", "Dantewada", "Darbhanga", "Darjeeling",
+    "Darrang", "Datia", "Dausa", "Davanagere", "Debagarh", "Dehradun", "Deoghar", "Deoria", "Devbhoomi Dwarka", "Dewas",
+    "Dhalai", "Dhamtari", "Dhanbad", "Dhar", "Dharmapuri", "Dharwad", "Dhemaji", "Dhenkanal", "Dholpur", "Dhubri",
+    "Dhule", "Dibang Valley", "Dibrugarh", "Dima Hasao", "Dimapur", "Dindigul", "Dindori", "Diu", "Doda", "Dumka",
+    "Dungapur", "Durg", "East Champaran", "East Delhi", "East Garo Hills", "East Godavari", "East Kameng", "East Khasi Hills", "East Siang", "East Sikkim",
+    "East Singhbhum", "Ernakulam", "Erode", "Etah", "Etawah", "Faizabad", "Faridabad", "Faridkot", "Farrukhabad", "Fatehabad",
+    "Fatehgarh Sahib", "Fatehpur", "Fazilka", "Firozabad", "Firozpur", "Gadag", "Gadchiroli", "Gajapati", "Ganderbal", "Gandhinagar",
+    "Ganjam", "Garhwa", "Gariaband", "Gautam Buddha Nagar", "Gaya", "Ghaziabad", "Ghazipur", "Giridih", "Goa", "Goalpara",
+    "Godda", "Golaghat", "Gonda", "Gondia", "Gopalganj", "Gorakhpur", "Gulbarga", "Gumla", "Guna", "Guntur",
+    "Gurdaspur", "Gurgaon", "Gwalior", "Hailakandi", "Hamirpur", "Hanumangarh", "Hapur", "Harda", "Hardoi", "Haridwar",
+    "Hassan", "Hathras", "Haveri", "Hazaribagh", "Hisar", "Hooghly", "Hoshangabad", "Hoshiarpur", "Howrah", "Hyderabad",
+    "Idukki", "Imphal East", "Imphal West", "Indore", "Jabalpur", "Jagatsinghpur", "Jaintia Hills", "Jaipur", "Jaisalmer", "Jajpur",
+    "Jalandhar", "Jalaun", "Jalgaon", "Jalna", "Jalore", "Jammu", "Jamnagar", "Jamtara", "Jamui", "Janjgir-Champa",
+    "Jashpur", "Jaunpur", "Jehanabad", "Jhabua", "Jhajjar", "Jhalawar", "Jhansi", "Jhargram", "Jharsuguda", "Jhunjhunu",
+    "Jind", "Jodhpur", "Jorhat", "Junagadh", "Jyotiba Phule Nagar", "Kabirdham", "Kadapa", "Kaimur", "Kaithal", "Kakinada",
+    "Kalahandi", "Kamrup", "Kamrup Metropolitan", "Kancheepuram", "Kandhamal", "Kangra", "Kanker", "Kannauj", "Kannur", "Kanpur Dehat",
+    "Kanpur Nagar", "Kapurthala", "Karauli", "Karbi Anglong", "Kargil", "Karimganj", "Karimnagar", "Karnal", "Karur", "Kasaragod",
+    "Kasganj", "Kathua", "Katihar", "Katni", "Kaushambi", "Kendrapara", "Kendujhar", "Khagaria", "Khammam", "Khandwa",
+    "Khargone", "Kheda", "Khordha", "Khunti", "Kinnaur", "Kiphire", "Kishanganj", "Kishtwar", "Kodagu", "Koderma",
+    "Kohima", "Kokrajhar", "Kolar", "Kolasib", "Kolhapur", "Kolkata", "Kollam", "Koppal", "Koraput", "Korba",
+    "Korea", "Koriya", "Kota", "Kottayam", "Kozhikode", "Krishna", "Kulgam", "Kullu", "Kumuram Bheem", "Kupwara",
+    "Kurnool", "Kurukshetra", "Kurung Kumey", "Kushinagar", "Kutch", "Lahaul and Spiti", "Lakhimpur", "Lakhisarai", "Lakshadweep", "Lalitpur",
+    "Latehar", "Latur", "Lawngtlai", "Leh", "Lohardaga", "Lohit", "Longding", "Lower Dibang Valley", "Lower Subansiri", "Lucknow",
+    "Ludhiana", "Lunglei", "Machilipatnam", "Madhepura", "Madhubani", "Madurai", "Maharajganj", "Mahasamund", "Mahbubnagar", "Mahe",
+    "Mahendragarh", "Mahoba", "Mainpuri", "Malappuram", "Malda", "Malkangiri", "Mamit", "Mandi", "Mandya", "Mandsaur",
+    "Mangalore", "Mansa", "Mathura", "Mau", "Mayurbhanj", "Medak", "Medinipur East", "Medinipur West", "Meerut", "Meghalaya",
+    "Mehsana", "Mewat", "Mirzapur", "Moga", "Mohali", "Mokokchung", "Mon", "Moradabad", "Morbi", "Morena",
+    "Mumbai", "Mumbai Suburban", "Munger", "Murshidabad", "Muzaffarnagar", "Muzaffarpur", "Mysore", "Nabarangpur", "Nadia", "Nagaon",
+    "Nagapattinam", "Nagaur", "Nagpur", "Nainital", "Nalanda", "Nalbari", "Nalgonda", "Namakkal", "Nanded", "Nandurbar",
+    "Narayanpur", "Narmada", "Narsinghpur", "Nashik", "Navsari", "Nawada", "Nayagarh", "Neemuch", "Nellore", "New Delhi",
+    "Nilgiris", "Nizamabad", "Noida", "North 24 Parganas", "North Delhi", "North East Delhi", "North Goa", "North Sikkim", "North Tripura", "North West Delhi",
+    "Nuapada", "Ongole", "Ooty", "Osmanabad", "Pachmarhi", "Pakur", "Palakkad", "Palamu", "Pali", "Palwal",
+    "Panaji", "Panchkula", "Panchmahal", "Panipat", "Panna", "Papum Pare", "Parbhani", "Paschim Medinipur", "Patan", "Pathanamthitta",
+    "Pathankot", "Patiala", "Patna", "Pauri Garhwal", "Perambalur", "Phek", "Pilibhit", "Pithoragarh", "Pondicherry", "Poonch",
+    "Porbandar", "Pratapgarh", "Pudukkottai", "Pulwama", "Pune", "Purba Medinipur", "Puri", "Purnia", "Purulia", "Raebareli",
+    "Raichur", "Raigad", "Raigarh", "Raipur", "Raisen", "Rajanna Sircilla", "Rajgarh", "Rajkot", "Rajnandgaon", "Rajouri",
+    "Rajsamand", "Ramanagara", "Ramanathapuram", "Ramban", "Ramgarh", "Rampur", "Ranchi", "Ratlam", "Ratnagiri", "Rayagada",
+    "Reasi", "Rewa", "Rewari", "Ri Bhoi", "Rohtak", "Rohtas", "Rudraprayag", "Rupnagar", "Sabarkantha", "Sagar",
+    "Saharanpur", "Saharsa", "Sahibganj", "Saiha", "Salem", "Samastipur", "Samba", "Sambalpur", "Sangli", "Sangrur",
+    "Sant Kabir Nagar", "Sant Ravidas Nagar", "Saran", "Satara", "Satna", "Sawai Madhopur", "Sehore", "Senapati", "Seoni", "Seraikela Kharsawan",
+    "Serchhip", "Shahdol", "Shahjahanpur", "Shajapur", "Shamli", "Sheikhpura", "Sheohar", "Sheopur", "Shimla", "Shimoga",
+    "Shivpuri", "Shopian", "Shravasti", "Siddharthnagar", "Sidhi", "Sikar", "Simdega", "Sindhudurg", "Singrauli", "Sirmaur",
+    "Sirohi", "Sirsa", "Sitamarhi", "Sitapur", "Sivaganga", "Siwan", "Solan", "Solapur", "Sonbhadra", "Sonipat",
+    "Sonitpur", "South 24 Parganas", "South Delhi", "South East Delhi", "South Garo Hills", "South Goa", "South Sikkim", "South Tripura", "South West Delhi", "Sri Muktsar Sahib",
+    "Srinagar", "Subarnapur", "Sukma", "Sultanpur", "Sundergarh", "Supaul", "Surat", "Surendranagar", "Surguja", "Tamenglong",
+    "Tapi", "Tarn Taran", "Tawang", "Tehri Garhwal", "Thane", "Thanjavur", "The Dangs", "Theni", "Thiruvananthapuram", "Thoothukudi",
+    "Thoubal", "Thrissur", "Tikamgarh", "Tinsukia", "Tirap", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Tiruvannamalai", "Tonk",
+    "Tuensang", "Tumkur", "Udaipur", "Udalguri", "Udhampur", "Udham Singh Nagar", "Udupi", "Ujjain", "Ukhrul", "Umaria",
+    "Una", "Unakoti", "Unnao", "Upper Siang", "Upper Subansiri", "Uttar Dinajpur", "Uttarkashi", "Vadodara", "Vaishali", "Valsad",
+    "Varanasi", "Vellore", "Vidisha", "Vijayapura", "Vijayawada", "Viluppuram", "Virudhunagar", "Visakhapatnam", "Vizianagaram", "Wardha",
+    "Warangal Rural", "Warangal Urban", "Washim", "Wayanad", "West Champaran", "West Delhi", "West Garo Hills", "West Godavari", "West Kameng", "West Khasi Hills",
+    "West Siang", "West Sikkim", "West Singhbhum", "West Tripura", "Wokha", "Yadgir", "Yamunanagar", "Yanam", "Yavatmal", "Zunheboto"
+];
+
 // Add styles for the moda
 const modalStyles = {
         overlay: {
@@ -358,6 +436,161 @@ const PaymentMethodSelector = ({ selectedMethod, onSelect }) => {
                     <span className="ml-2 text-sm text-gray-600">(Pay when you receive)</span>
                 </div>
             </label>
+        </div>
+    );
+};
+
+// Searchable Dropdown Component for Cities
+const SearchableDropdown = ({ value, onChange, options, placeholder, error, name }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredOptions, setFilteredOptions] = useState(options);
+    const dropdownRef = useRef(null);
+
+    // Filter options based on search term
+    useEffect(() => {
+        if (searchTerm) {
+            const filtered = options.filter(option =>
+                option.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredOptions(filtered);
+        } else {
+            setFilteredOptions(options);
+        }
+    }, [searchTerm, options]);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleSelect = (option) => {
+        onChange({ target: { name, value: option } });
+        setIsOpen(false);
+        setSearchTerm('');
+    };
+
+    const handleInputClick = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        if (!isOpen) setIsOpen(true);
+    };
+
+    const handleCustomCitySelect = () => {
+        if (searchTerm.trim()) {
+            onChange({ target: { name, value: searchTerm.trim() } });
+            setIsOpen(false);
+            setSearchTerm('');
+        }
+    };
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <div
+                className={`block w-full rounded-md shadow-sm 
+                    focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 
+                    border ${error ? 'border-red-500' : 'border-gray-300'} 
+                    transition-all duration-200 hover:border-blue-400
+                    focus-within:shadow-lg transform hover:scale-[1.01]
+                    font-['Inter',sans-serif] cursor-pointer bg-white`}
+                onClick={handleInputClick}
+            >
+                <div className="flex items-center justify-between p-3">
+                    <span className={`${value ? 'text-gray-900' : 'text-gray-500'} text-sm`}>
+                        {value || placeholder}
+                    </span>
+                    <svg 
+                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
+
+            {isOpen && (
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-hidden">
+                    {/* Search Input */}
+                    <div className="p-3 border-b border-gray-200 bg-gray-50">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                placeholder="Search or type city name..."
+                                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                autoFocus
+                            />
+                            <svg
+                                className="absolute left-3 top-2.5 w-4 h-4 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {/* Options List */}
+                    <div className="max-h-40 overflow-y-auto">
+                        {filteredOptions.length > 0 ? (
+                            filteredOptions.map((option, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleSelect(option)}
+                                    className="px-4 py-3 text-sm hover:bg-blue-50 cursor-pointer transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                                >
+                                    <div className="flex items-center">
+                                        <svg className="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span className="text-gray-800">{option}</span>
+                                    </div>
+                                </div>
+                            ))
+                        ) : searchTerm.trim() ? (
+                            /* Custom city option when no matches found */
+                            <div
+                                onClick={handleCustomCitySelect}
+                                className="px-4 py-3 text-sm hover:bg-green-50 cursor-pointer transition-colors duration-150 border-b border-gray-100"
+                            >
+                                <div className="flex items-center">
+                                    <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    <div>
+                                        <span className="text-gray-800 font-medium">Use "{searchTerm}"</span>
+                                        <div className="text-xs text-gray-500 mt-1">Click to select this custom city</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                                <svg className="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                Start typing to search cities
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -455,8 +688,12 @@ const Checkout = () => {
         lastName: '',
         email: '',
         phone: '',
+        flatHouseBuilding: '',
         address: '',
+        landmark: '',
         city: '',
+        town: '',
+        pincode: '',
         country: 'India',
     });
 
@@ -668,8 +905,12 @@ const sendOrderConfirmationEmail = async (paymentDetails) => {
             lastName: formData.lastName,
             email: formData.email,
             phone: formData.phone,
+            flatHouseBuilding: formData.flatHouseBuilding,
             address: formData.address,
+            landmark: formData.landmark,
             city: formData.city,
+            town: formData.town,
+            pincode: formData.pincode,
             country: formData.country
         };
         
@@ -713,8 +954,12 @@ const sendOrderConfirmationEmail = async (paymentDetails) => {
                     Name: ${formData.firstName} ${formData.lastName}
                     Email: ${formData.email}
                     Phone: ${formData.phone}
-                    Address: ${formData.address}
+                    Flat/House/Building: ${formData.flatHouseBuilding}
+                    Street Address: ${formData.address}
+                    Landmark: ${formData.landmark || 'N/A'}
                     City: ${formData.city}
+                    Town: ${formData.town || 'N/A'}
+                    Pincode: ${formData.pincode}
                     Country: ${formData.country}
                     
                     Payment Information:
@@ -747,8 +992,12 @@ const trackAbandonedOrder = () => {
                 lastName: formData.lastName,
                 email: formData.email,
                 phone: formData.phone,
+                flatHouseBuilding: formData.flatHouseBuilding,
                 address: formData.address,
+                landmark: formData.landmark,
                 city: formData.city,
+                town: formData.town,
+                pincode: formData.pincode,
                 country: formData.country
             },
             orderDetails: {
@@ -805,14 +1054,21 @@ const validateForm = () => {
     if (!formData.firstName) errors.firstName = 'First name is required';
     if (!formData.lastName) errors.lastName = 'Last name is required';
     if (!formData.email) errors.email = 'Email is required';
+    if (!formData.flatHouseBuilding) errors.flatHouseBuilding = 'Flat/House/Building is required';
     if (!formData.address) errors.address = 'Address is required';
     if (!formData.city) errors.city = 'City is required';
+    if (!formData.pincode) errors.pincode = 'Pincode is required';
 
     // Enhanced phone validation
     if (!formData.phone) {
         errors.phone = 'Phone number is required';
     } else if (!/^\d{10}$/.test(formData.phone)) {
         errors.phone = 'Phone number must be exactly 10 digits';
+    }
+
+    // Pincode validation
+    if (formData.pincode && !/^\d{6}$/.test(formData.pincode)) {
+        errors.pincode = 'Pincode must be exactly 6 digits';
     }
 
     // Email validation
@@ -839,6 +1095,14 @@ const handleInputChange = (e) => {
         setFormData(prev => ({
             ...prev,
             [name]: truncatedPhone
+        }));
+    } else if (name === 'pincode') {
+        // Remove any non-digit characters and limit to 6 digits
+        const pincodeValue = value.replace(/\D/g, '');
+        const truncatedPincode = pincodeValue.slice(0, 6);
+        setFormData(prev => ({
+            ...prev,
+            [name]: truncatedPincode
         }));
     } else {
         setFormData(prev => ({
@@ -982,8 +1246,12 @@ const handleRazorpayPayment = async () => {
                             lastName: formData.lastName,
                             email: formData.email,
                             phone: formData.phone,
+                            flatHouseBuilding: formData.flatHouseBuilding,
                             address: formData.address,
+                            landmark: formData.landmark,
                             city: formData.city,
+                            town: formData.town,
+                            pincode: formData.pincode,
                             country: formData.country
                         },
                         orderDetails: {
@@ -1095,7 +1363,7 @@ const onPaymentSuccess = async (order) => {
         customerName: `${formData.firstName} ${formData.lastName}`,
         customerEmail: formData.email,
         customerPhone: formData.phone,
-        shippingAddress: `${formData.address}\n${formData.city}, ${formData.country}`
+        shippingAddress: `${formData.flatHouseBuilding}, ${formData.address}${formData.landmark ? ', Near ' + formData.landmark : ''}\n${formData.city}${formData.town ? ', ' + formData.town : ''} - ${formData.pincode}\n${formData.country}`
     };
 
         // Store order data for thank you page
@@ -1221,7 +1489,7 @@ const onPaymentSuccess = async (order) => {
     // Main component return
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-['Poppins',sans-serif]">
-            <style>{fontStyles}</style>
+            {/* <style>{fontStyles}</style> */}
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {renderCheckoutProgress()}
                 
@@ -1349,16 +1617,43 @@ const onPaymentSuccess = async (order) => {
 
                                 <div className="pt-2 border-t border-gray-200">
                                     <h3 className="text-lg font-medium text-gray-800 mb-3">Delivery Address</h3>
-                                    <div>
+                                    
+                                    {/* Flat/House/Building Number */}
+                                    <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Address
+                                            Flat/House/Building No. *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="flatHouseBuilding"
+                                            value={formData.flatHouseBuilding}
+                                            onChange={handleInputChange}
+                                            placeholder="Enter flat, house, or building number"
+                                            className={`block w-full rounded-md shadow-sm 
+                                                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                                                        border ${formErrors.flatHouseBuilding ? 'border-red-500' : 'border-gray-300'} 
+                                                        p-3 transition-all duration-200 hover:border-blue-400
+                                                        focus:shadow-lg transform focus:scale-[1.01]
+                                                        font-['Inter',sans-serif]`}
+                                        />
+                                        {formErrors.flatHouseBuilding && (
+                                            <p className="text-red-500 text-sm mt-1">
+                                                {formErrors.flatHouseBuilding}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Street Address */}
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Street Address *
                                         </label>
                                         <input
                                             type="text"
                                             name="address"
                                             value={formData.address}
                                             onChange={handleInputChange}
-                                            placeholder="Enter your complete address"
+                                            placeholder="Enter street address"
                                             className={`block w-full rounded-md shadow-sm 
                                                         focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
                                                         border ${formErrors.address ? 'border-red-500' : 'border-gray-300'} 
@@ -1373,23 +1668,44 @@ const onPaymentSuccess = async (order) => {
                                         )}
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-4 mt-4">
+                                    {/* Landmark */}
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Landmark (Optional)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="landmark"
+                                            value={formData.landmark}
+                                            onChange={handleInputChange}
+                                            placeholder="Enter nearby landmark"
+                                            className={`block w-full rounded-md shadow-sm 
+                                                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                                                        border ${formErrors.landmark ? 'border-red-500' : 'border-gray-300'} 
+                                                        p-3 transition-all duration-200 hover:border-blue-400
+                                                        focus:shadow-lg transform focus:scale-[1.01]
+                                                        font-['Inter',sans-serif]`}
+                                        />
+                                        {formErrors.landmark && (
+                                            <p className="text-red-500 text-sm mt-1">
+                                                {formErrors.landmark}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 mb-4">
+                                        {/* City */}
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                City
+                                                City *
                                             </label>
-                                            <input
-                                                type="text"
+                                            <SearchableDropdown
                                                 name="city"
                                                 value={formData.city}
                                                 onChange={handleInputChange}
-                                                placeholder="Enter your city"
-                                                className={`block w-full rounded-md shadow-sm 
-                                                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                                            border ${formErrors.city ? 'border-red-500' : 'border-gray-300'} 
-                                                            p-3 transition-all duration-200 hover:border-blue-400
-                                                            focus:shadow-lg transform focus:scale-[1.01]
-                                                            font-['Inter',sans-serif]`}
+                                                options={INDIAN_CITIES}
+                                                placeholder="Select your city"
+                                                error={formErrors.city}
                                             />
                                             {formErrors.city && (
                                                 <p className="text-red-500 text-sm mt-1">
@@ -1398,9 +1714,63 @@ const onPaymentSuccess = async (order) => {
                                             )}
                                         </div>
 
+                                        {/* Town */}
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                Country
+                                                Town (Optional)
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="town"
+                                                value={formData.town}
+                                                onChange={handleInputChange}
+                                                placeholder="Enter your town"
+                                                className={`block w-full rounded-md shadow-sm 
+                                                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                                                            border ${formErrors.town ? 'border-red-500' : 'border-gray-300'} 
+                                                            p-3 transition-all duration-200 hover:border-blue-400
+                                                            focus:shadow-lg transform focus:scale-[1.01]
+                                                            font-['Inter',sans-serif]`}
+                                            />
+                                            {formErrors.town && (
+                                                <p className="text-red-500 text-sm mt-1">
+                                                    {formErrors.town}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {/* Pincode */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Pincode *
+                                            </label>
+                                            <input
+                                                type="tel"
+                                                name="pincode"
+                                                value={formData.pincode}
+                                                onChange={handleInputChange}
+                                                placeholder="Enter 6-digit pincode"
+                                                maxLength="6"
+                                                className={`block w-full rounded-md shadow-sm 
+                                                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                                                            border ${formErrors.pincode ? 'border-red-500' : 'border-gray-300'} 
+                                                            p-3 transition-all duration-200 hover:border-blue-400
+                                                            focus:shadow-lg transform focus:scale-[1.01]
+                                                            font-['Inter',sans-serif]`}
+                                            />
+                                            {formErrors.pincode && (
+                                                <p className="text-red-500 text-sm mt-1">
+                                                    {formErrors.pincode}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {/* Country */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Country *
                                             </label>
                                             <select
                                                 name="country"

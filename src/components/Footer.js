@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="md:col-span-1">
           <img src={logo} alt="Camph Airr" className="h-32" />
           <p className="text-sm leading-relaxed text-gray-700 max-w-xs">
-            Breathe easy with Camph Airr – pure camphor aromatherapy for every space. Naturally cleanse your air and elevate your senses, one drop at a time.
+            Breathe easy with Camph Airr – pure camphor. Naturally cleanse your air and elevate your senses.
           </p>
         </div>
 
@@ -19,10 +19,9 @@ const Footer = () => {
           <h4 className="text-lg font-semibold mb-4">Explore</h4>
           <ul className="space-y-2 text-sm text-gray-700">
             <li><a href="/#banner" className="hover:text-[#5d3c77]">Overview</a></li>
-            <li><a href="/#products" className="hover:text-[#5d3c77]">How It Works</a></li>
-            <li><a href="/#flavours" className="hover:text-[#5d3c77]">Fragrance Types</a></li>
-            <li><a href="/#usage" className="hover:text-[#5d3c77]">Usage Areas</a></li>
-            <li><a href="/#comparison" className="hover:text-[#5d3c77]">Why Choose Us</a></li>
+            <li><a href="/#products" className="hover:text-[#5d3c77]">Products</a></li>
+            <li><a href="/#new" className="hover:text-[#5d3c77]">What's New</a></li>
+            <li><a href="/#about" className="hover:text-[#5d3c77]">About Us</a></li>
           </ul>
         </div>
 

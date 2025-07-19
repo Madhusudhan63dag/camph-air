@@ -5,6 +5,7 @@ import lemongrass1 from '../assets/single/2.webp';
 import sandalwood1 from '../assets/single/5.webp';
 import original1 from '../assets/single/3.webp';
 import jasmine1 from '../assets/single/4.webp';
+import rose1 from '../assets/single/6.webp';
 // Example combo images
 import originalLavender from '../assets/combo/1.webp';
 import originalLemongrass from '../assets/combo/2.webp';
@@ -58,12 +59,12 @@ const SpecialComboOffer = ({ navigate }) => {
   };
 
   return (
-    <div className="">
+    <div id="new" className="">
       <img src={banner} alt="Special Combo Offer" className="w-full" />
       <div className=''>
         {/* Content */}
         <div className="md:w-full text-left">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#5d3c77] mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5d3c77] mb-4">
             New Combo Pack
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed mb-6">
@@ -113,6 +114,7 @@ const flavorImages = {
   Sandalwood: [sandalwood1, sandalwood1],
   Original: [original1, original1],
   Jasmine: [jasmine1, jasmine1],
+  Rose: [rose1, rose1],
 };
 
 const flavorPrices = {
@@ -120,7 +122,8 @@ const flavorPrices = {
   Lemongrass: 349,
   Sandalwood: 349,
   Original: 390,
-  Jasmine: 370,
+  Jasmine: 349,
+  Rose: 349,
 };
 
 const flavorMRPs = {
@@ -129,6 +132,7 @@ const flavorMRPs = {
   Sandalwood: 599,
   Original: 699,
   Jasmine: 649,
+  Rose: 649,
 };
 
 const flavors = Object.keys(flavorImages);
@@ -151,7 +155,7 @@ const generateCards = (packs) => {
   key={index}
   className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200 bg-white hover:shadow-3xl transition-transform duration-300 hover:-translate-y-2 group flex flex-col items-center"
   style={{ width: 380, maxWidth: '100%' }}
->
+  >
   {/* Image Section */}
   <div className="flex justify-center items-center w-full bg-gradient-to-br from-purple-50 to-white mb-2">
     <div className="w-full max-w-[400px] aspect-square relative">
@@ -197,7 +201,7 @@ const generateCards = (packs) => {
       Add to Cart
     </button>
   </div>
-</div>
+  </div>
 
     );
   });
@@ -212,6 +216,38 @@ const DisplayCards = () => {
   const [showMoreSingles, setShowMoreSingles] = useState(false);
   const [showMoreCombos, setShowMoreCombos] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+        // Place this at the top where you define your states
+  const [selectedFlavors, setSelectedFlavors] = useState([]);
+
+  const handleBuyNowCombo = (selected) => {
+    if (!selected.length) return;
+    // Calculate price based on selection
+    const comboPrice = selected.reduce((total, flavor) => total + flavorPrices[flavor], 0);
+    const comboMRP = selected.reduce((total, flavor) => total + flavorMRPs[flavor], 0);
+
+    const comboItem = {
+      name: `Combo of ${selected.length} (${selected.join(', ')})`,
+      price: comboPrice,
+      mrp: comboMRP,
+      combo: selected,
+      id: Date.now(),
+      quantity: 1
+    };
+
+    localStorage.setItem('cart', JSON.stringify([comboItem]));
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+
+    const orderDetails = {
+      productName: comboItem.name,
+      quantity: 1,
+      fragrances: selected,
+      pricePerUnit: comboPrice,
+      totalAmount: comboPrice,
+      mainImage: combo4Image // Or another relevant image
+    };
+
+    navigate('/checkout', { state: orderDetails });
+  };
 
 
   
@@ -262,49 +298,47 @@ const DisplayCards = () => {
     setTimeLeft(`${hrs}:${mins}:${secs}`);
   };
 
-  const handleBuyNowCombo = () => {
-    // Add all 4 flavors to cart
-    const comboOf4 = flavors; // All 4 flavors
-    const comboPrice = 1399; // Updated combo price for 4 flavors
-    const comboMRP = flavors.reduce((total, flavor) => total + flavorMRPs[flavor], 0);
+  // const handleBuyNowCombo = () => {
+  //   // Add all 4 flavors to cart
+  //   const comboOf4 = flavors; // All 4 flavors
+  //   const comboPrice = 1399; // Updated combo price for 4 flavors
+  //   const comboMRP = flavors.reduce((total, flavor) => total + flavorMRPs[flavor], 0);
     
-    const comboItem = {
-      name: 'Combo of 4 Fragrances',
-      price: comboPrice,
-      mrp: comboMRP,
-      combo: comboOf4,
-      id: Date.now(),
-      quantity: 1
-    };
+  //   const comboItem = {
+  //     name: 'Combo of 4 Fragrances',
+  //     price: comboPrice,
+  //     mrp: comboMRP,
+  //     combo: comboOf4,
+  //     id: Date.now(),
+  //     quantity: 1
+  //   };
 
-    // Clear existing cart and add combo
-    localStorage.setItem('cart', JSON.stringify([comboItem]));
+  //   // Clear existing cart and add combo
+  //   localStorage.setItem('cart', JSON.stringify([comboItem]));
     
-    // Dispatch custom event to notify navbar
-    window.dispatchEvent(new CustomEvent('cartUpdated'));
+  //   // Dispatch custom event to notify navbar
+  //   window.dispatchEvent(new CustomEvent('cartUpdated'));
     
-    // Navigate to checkout with order details
-    const orderDetails = {
-      productName: 'Combo of 4 Fragrances',
-      quantity: 1,
-      fragrances: comboOf4,
-      pricePerUnit: comboPrice,
-      totalAmount: comboPrice,
-      mainImage: original1
-    };
+  //   // Navigate to checkout with order details
+  //   const orderDetails = {
+  //     productName: 'Combo of 4 Fragrances',
+  //     quantity: 1,
+  //     fragrances: comboOf4,
+  //     pricePerUnit: comboPrice,
+  //     totalAmount: comboPrice,
+  //     mainImage: original1
+  //   };
     
-    navigate('/checkout', { state: orderDetails });
-  };
+  //   navigate('/checkout', { state: orderDetails });
+  // };
 
   // Prepare data for each category
-  const singlePacks = [['Original'], ['Lavender'], ['Lemongrass'], ['Sandalwood'], ['Jasmine']];
+  const singlePacks = [['Original'], ['Lavender'], ['Lemongrass'], ['Sandalwood'], ['Jasmine'], ['Rose']];
   const mixedCombos = [
-    // Two-pack combos
-    [flavors[3], flavors[0]], // Original + Lavender
-    [flavors[3], flavors[1]], // Original + Lemongrass
-    [flavors[3], flavors[2]], // Original + Sandalwood
-    [flavors[3], flavors[4]], // Original + Jasmine
-    // Three-pack combos
+    [flavors[3], flavors[0]],
+    [flavors[3], flavors[1]],
+    [flavors[3], flavors[2]],
+    [flavors[3], flavors[4]],
     ['Lavender', 'Original', 'Lemongrass'],
     ['Original', 'Sandalwood', 'Jasmine'],
     ['Sandalwood', 'Original', 'Lavender'],
@@ -314,23 +348,48 @@ const DisplayCards = () => {
 
   return (
     <div id="products" className="overflow-hidden p-6 space-y-12 bg-gradient-to-br from-purple-50 to-blue-50">
-      <div className="text-center text-xl font-bold text-red-700 bg-red-100 px-4 py-3 rounded-lg shadow">
-        Limited Stock Offer! Deal ends in <span className="text-red-800 font-bold">{timeLeft}</span>
-      </div>
+
       {showPopup && (
         <div className="fixed z-10 bottom-6 right-6 max-w-xs bg-white border border-purple-300 shadow-xl p-4 rounded-2xl animate-bounce-in">
-          <div className="text-[#5d3c77] font-bold text-lg mb-1"> Select Your Own combo </div>
+          <div className="text-[#5d3c77] font-bold text-lg mb-2">Select Your Combo</div>
           <p className="text-sm text-gray-700 mb-2">
-            Get all 5 fragrances for just <span className="font-semibold text-green-600">₹1399</span>. Limited stock available!
+            Mix and match your favourite fragrances
           </p>
-          <button 
-            className="text-sm bg-[#5d3c77] text-white px-4 py-1 rounded-full hover:bg-[#472c5d]" 
-            onClick={handleBuyNowCombo}
+          <div className="flex flex-wrap gap-2 mb-3">
+            {flavors.map((flavor) => (
+              <button
+                key={flavor}
+                className={`px-3 py-1 rounded-full border text-sm transition ${
+                  selectedFlavors.includes(flavor)
+                    ? 'bg-[#5d3c77] text-white border-[#5d3c77]'
+                    : 'bg-white text-[#5d3c77] border-[#5d3c77]'
+                }`}
+                onClick={() => {
+                  setSelectedFlavors((prev) =>
+                    prev.includes(flavor)
+                      ? prev.filter(f => f !== flavor)
+                      : [...prev, flavor]
+                  );
+                }}
+              >
+                {flavor}
+              </button>
+            ))}
+          </div>
+          <button
+            className={`text-sm w-full px-4 py-2 rounded-full font-medium ${
+              selectedFlavors.length
+                ? 'bg-[#5d3c77] text-white hover:bg-[#472c5d]'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+            onClick={() => handleBuyNowCombo(selectedFlavors)}
+            disabled={selectedFlavors.length === 0}
           >
             Buy Now
           </button>
         </div>
       )}
+
 
       {/* Heading */}
       <div>
@@ -362,7 +421,7 @@ const DisplayCards = () => {
 
       {/* Combo Mix */}
       <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Combo Mix</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Camph Airr Combo Collection</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 5))}
         </div>

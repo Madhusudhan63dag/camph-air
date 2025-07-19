@@ -2,57 +2,15 @@ import React from 'react';
 
 const Five = () => {
   return (
-    <section id="comparison" className="w-full py-16 px-4 md:px-12 lg:px-20 bg-white text-gray-800">
+    <section id="about" className="w-full py-16 px-4 md:px-12 lg:px-20 bg-white text-gray-800">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-[#5d3c77] mb-12 text-center">
           Discover the Power of Camphor with Camph Airr
         </h2>
 
-        <div className="flex flex-col lg:flex-row gap-10">
-          {/* LEFT: Product Info Table */}
-          <div className="lg:w-1/2 w-full">
-            <div className="overflow-hidden">
-              <table className="w-full text-sm md:text-base">
-                <tbody>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold w-1/3">Brand</td>
-                    <td className="px-4 py-3">Camph Airr</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Type</td>
-                    <td className="px-4 py-3">Camphor-Based Fragrance Oil</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Fragrance Options</td>
-                    <td className="px-4 py-3">Lavender, Jasmine, Lemongrass, Sandalwood, Original</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Primary Ingredient</td>
-                    <td className="px-4 py-3">100% Natural Camphor & Essential Oils</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Quantity</td>
-                    <td className="px-4 py-3">1 pack</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Usage Method</td>
-                    <td className="px-4 py-3">ust open the pack and place it in your desired spot — no mixing, no mess.</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Shelf Life</td>
-                    <td className="px-4 py-3">45 days</td>
-                  </tr>
-                  <tr className="border-b-[1px] border-black">
-                    <td className="px-4 py-3 font-semibold">Free From</td>
-                    <td className="px-4 py-3">No Alcohol, No Artificial Chemicals</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
+        <div className="flex">
           {/* RIGHT: Product Description */}
-          <div className="lg:w-1/2 w-full flex flex-col justify-between">
+          <div className="w-full flex flex-col justify-between">
             {/* Overview */}
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-[#5d3c77] mb-4">
@@ -93,7 +51,7 @@ const Five = () => {
                 a slow-releasing, emotionally grounding fragrance. It’s compact, travel-ready, and
                 beautifully packaged — making it a wonderful self-care gift or home essential.
                 <br /><br />
-                Feel the difference that real purity makes. One drop is all it takes.
+                Feel the difference that real purity makes.
               </p>
             </div>
           </div>
