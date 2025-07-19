@@ -345,10 +345,10 @@ const DisplayCards = () => {
       {/* Single */}
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Single Pack</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
-          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 4))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 5))}
         </div>
-        {singlePacks.length > 4 && (
+        {singlePacks.length > 5 && (
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setShowMoreSingles(!showMoreSingles)}
@@ -363,10 +363,10 @@ const DisplayCards = () => {
       {/* Combo Mix */}
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Combo Mix</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
-          {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 4))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+          {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 5))}
         </div>
-        {mixedCombos.length > 4 && (
+        {mixedCombos.length > 5 && (
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setShowMoreCombos(!showMoreCombos)}
