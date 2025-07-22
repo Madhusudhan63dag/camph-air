@@ -65,9 +65,9 @@ function Home() {
       <One />
       <PromoBanner />
       <Two />
-      <div className='overflow-hidden'>
+      {/* <div className='overflow-hidden'>
         <Three />
-      </div>
+      </div> */}
       <Four />
       <Five />
       <Six />
