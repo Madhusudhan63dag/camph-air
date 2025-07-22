@@ -403,11 +403,11 @@ const DisplayCards = () => {
 
       {/* Single */}
       <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Single Pack</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-[#5d3c77]">Single Pack</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-8">
-          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 3))}
+          {showMoreSingles ? generateCards(singlePacks) : generateCards(singlePacks.slice(0, 6))}
         </div>
-        {singlePacks.length > 3 && (
+        {singlePacks.length > 6 && (
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setShowMoreSingles(!showMoreSingles)}
@@ -423,9 +423,9 @@ const DisplayCards = () => {
       <div>
         <h2 className="text-2xl font-bold text-center mb-6">Camph Airr Combo Collection</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-8">
-          {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 3))}
+          {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 9))}
         </div>
-        {mixedCombos.length > 3 && (
+        {mixedCombos.length > 9 && (
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setShowMoreCombos(!showMoreCombos)}
