@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import banner1 from '../assets/banner1.webp';
-import banner2 from '../assets/banner3.webp';
-import banner3 from '../assets/banner4.webp';
-import banner5 from '../assets/banner5.webp';
+import banner1 from '../assets/banner5.webp';
+import banner2 from '../assets/banner4.webp';
+import banner3 from '../assets/banner3.webp';
+import banner5 from '../assets/banner1.webp';
 
 // Import mobile-specific banners
 import banner1Mobile from '../assets/banner1-mobile.webp';
@@ -13,7 +13,7 @@ import banner5Mobile from '../assets/banner5-mobile.webp';
 const MOBILE_BREAKPOINT = 768; // px (adjust as needed)
 
 const One = () => {
-  const bannersDesktop = [banner1, banner5, banner3, banner2 ];
+  const bannersDesktop = [banner1, banner2, banner3, banner5 ];
   const bannersMobile = [banner1Mobile, banner2Mobile, banner3Mobile, banner5Mobile];
 
   const [current, setCurrent] = useState(0);
