@@ -26,6 +26,8 @@ import combo4Image from '../assets/combo/10.webp';
 import banner from '../assets/banner6.webp';
 
 
+
+
 const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => {
   const [selectedPacks, setSelectedPacks] = useState({}); // { "Lavender": 1, ... }
 
@@ -267,6 +269,10 @@ const SpecialComboOffer = ({ navigate }) => {
     </div>
   );
 };
+
+
+
+
 
 const comboImages = {
   'Original + Lavender': [originalLavender, originalLavender],
