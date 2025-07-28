@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
-
 import './styles.css';
-
-// import required modules
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 import lavender1 from '../assets/single/1.webp';
 import lemongrass1 from '../assets/single/2.webp';
@@ -19,102 +13,103 @@ import sandalwood1 from '../assets/single/5.webp';
 import original1 from '../assets/single/3.webp';
 import jasmine1 from '../assets/single/4.webp';
 import rose1 from '../assets/single/6.webp';
-// Example combo images
 import originalLavender from '../assets/combo/1.webp';
 import originalLemongrass from '../assets/combo/2.webp';
 import originalSandalwood from '../assets/combo/3.webp';
 import originalJasmine from '../assets/combo/4.webp';
-
-// combo of 3 
 import combo from '../assets/combo/5.webp';
 import combo1 from '../assets/combo/6.webp';
 import combo2 from '../assets/combo/7.webp';
 import combo3 from '../assets/combo/8.webp';
 import combo4 from '../assets/combo/9.webp';
-
 import combo4Image from '../assets/combo/10.webp';
 import banner from '../assets/banner6.webp';
 
-const freeTesters = {
-  Lavender: 'Jasmine',
-  Jasmine: 'Lemongrass',
-  Lemongrass: 'Sandalwood',
-  Original: 'Lemongrass',
-  Sandalwood: 'Lavender',
-  Rose: 'Sandalwood',
-};
 
 const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => {
   return (
-    <div className="relative w-full my-10 px-4">
-      <Swiper 
-        navigation={true} 
-        pagination={{ clickable: true }}
-        modules={[Navigation, Autoplay, Pagination]} 
-        className="mySwiper"
-        spaceBetween={30}
+    <div className="w-full max-w-screen-xl mx-auto px-4 py-10">
+      <Swiper
+        navigation
+        modules={[Navigation]}
+        spaceBetween={20}
         slidesPerView={1}
-        loop={true}
-        speed={800}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: false,
+        loop
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
         }}
-        effect="slide"
+        className="w-full"
       >
-        {packs.map((pack, index) => {
-          const slide = pack[0];
-          const image = flavorImages[slide][0];
-          const price = flavorPrices[slide];
-          const mrp = flavorMRPs[slide];
+        {packs.map(([flavor], idx) => {
+          const image = flavorImages[flavor][0];
+          const price = flavorPrices[flavor];
+          const mrp = flavorMRPs[flavor];
 
           return (
-            <SwiperSlide key={index}>
-              <div className="flex flex-col md:flex-row justify-center items-center min-h-[560px] gap-6 md:gap-0">
-                {/* Image */}
-                <div className="relative w-full md:w-1/2 h-[280px] md:h-full flex items-center justify-center">
+            <SwiperSlide key={idx}>
+              <div className="bg-white h-full flex flex-col">
+                {/* Product Image */}
+                <div className="relative w-full overflow-hidden mb-3">
                   <img
                     src={image}
-                    alt={slide}
-                    className="w-[260px] md:w-[430px] rounded-2xl shadow-2xl border-4 border-[#ece9ff] object-contain"
+                    alt={flavor}
+                    className="object-contain w-full h-full"
                   />
                 </div>
+                <div className='p-5'>
+                  
+                  {/* Title */}
+                  <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                    {flavor} Camphor Cone
+                  </h3>
 
-                {/* Content */}
-                <div className="flex-1 flex flex-col items-start justify-center w-full md:w-1/2 px-2 md:px-6 min-h-[360px] md:min-h-[420px]">
-                  <h3 className="text-2xl md:text-4xl font-extrabold text-[#5d3c77] mb-4">{slide}</h3>
-                  <div className="flex items-center gap-4 mb-3">
-                    <span className="text-base md:text-lg text-gray-400 line-through">₹{mrp}</span>
-                    <span className="text-xl md:text-3xl font-bold text-green-600">₹{price}</span>
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1 text-xs mb-2">
+                    <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
+                      100% Organic
+                    </span>
+                    <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                      Safe for Kids
+                    </span>
+                    <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                      New Launch
+                    </span>
                   </div>
-                  <p className="mb-4 text-gray-700 text-sm md:text-lg leading-relaxed">
-                    Bring freshness...premium {slide} camphor.
-                  </p>
-                  
-                  {/* Add tester text here */}
-                  <p className="mb-4 text-indigo-600 font-semibold">
-                    One Pack. Two Fragrances. Zero Chemicals.<br/>
-                    Includes a FREE tester of <strong>{freeTesters[slide]}</strong> fragrance!
-                  </p>
-                  <ul className="mb-5 text-gray-600 text-sm text-left pl-5 space-y-2">
-                    <li>Long-lasting & natural</li>
-                    <li>No burning, no mess—just open & enjoy</li>
-                    <li>Safe for any room, wardrobe, or car</li>
-                    <li>Limited time special price!</li>
-                  </ul>
-                  
-                  <button
+
+                  {/* Pricing */}
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="line-through text-sm text-gray-400">
+                      ₹{mrp}
+                    </span>
+                    <span className="text-lg font-bold text-green-600">
+                      ₹{price}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center space-x-2 text-sm mb-4">
+                    <span className="text-gray-600">Pack:</span>
+                    {[1, 2, 3].map((count) => (
+                      <button
+                        key={count}
+                        className="w-7 h-7 rounded-full border border-gray-300 hover:border-blue-500 hover:text-blue-500 text-gray-600 text-sm font-medium"
+                      >
+                        {count}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Add to Cart */}
+                  <button className="bg-blue-600  text-white text-sm font-medium p-2 rounded-lg hover:bg-blue-700 transition mt-auto"
                     onClick={() => {
                       let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                      cart.push({ name: slide, price, combo: [slide], id: Date.now() });
+                      cart.push({ name: flavor, price, combo: [flavor], id: Date.now() });
                       localStorage.setItem('cart', JSON.stringify(cart));
                       window.dispatchEvent(new CustomEvent('cartUpdated'));
                     }}
-                    className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] hover:from-[#472c5d] hover:to-[#3a2248] text-white text-base md:text-lg font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-full shadow-lg transition-all duration-250 active:scale-95"
-                    type="button"
                   >
-                    Add to Cart
+                    ADD TO CART
                   </button>
                 </div>
               </div>
@@ -125,6 +120,8 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
     </div>
   );
 };
+
+
 
 const REVIEWS = [
   "⭐⭐⭐⭐⭐\n\n“Keeps my wardrobe fresh for weeks!”",
@@ -223,7 +220,7 @@ const SpecialComboOffer = ({ navigate }) => {
         {/* Content */}
         <div className="md:w-full text-left">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5d3c77] mb-4">
-            New Combo Pack
+            ALL-In-One Fragrance Pack
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed mb-6">
             Unlock the power of purity, calmness, and style — all in one exclusive pack. Our <strong>5-in-1 Combo</strong> features all premium fragrances including <span className="text-[#5d3c77] font-semibold">Original Camphor</span> plus four handpicked fragrances.
@@ -366,6 +363,72 @@ const generateCards = (packs) => {
     });
 };
 
+const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => (
+  <div className="w-full px-4 py-5">
+    <Swiper
+      navigation
+      modules={[Navigation]}
+      spaceBetween={20}
+      slidesPerView={1}
+      loop
+      breakpoints={{
+        640: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024: { slidesPerView: 4 },
+      }}
+      className="w-full"
+    >
+      {packs.map((combo, idx) => {
+        const name = combo.join(' + ');
+        const price = combo.length === 2 ? 399 : combo.reduce((t, f) => t + flavorPrices[f], 0);
+        const mrp = combo.reduce((t, f) => t + flavorMRPs[f], 0);
+        let displayImage;
+
+        if (combo.length === 3) {
+          displayImage = threePackImages[name] || flavorImages[combo[0]];
+        } else if (combo.length === 2) {
+          displayImage = comboImages[name] || flavorImages[combo[0]];
+        } else {
+          displayImage = flavorImages[combo[0]];
+        }
+
+        return (
+          <SwiperSlide key={idx}>
+            <div className="bg-white h-full flex flex-col shadow-lg rounded-2xl overflow-hidden">
+              <div className="relative w-full overflow-hidden mb-3">
+                <img
+                  src={displayImage[0]}
+                  alt={name}
+                  className="object-contain w-full h-full"
+                />
+              </div>
+              <div className='p-5 flex flex-col flex-1'>
+                <h3 className="text-sm font-semibold text-gray-700 mb-1 text-center">
+                  {name} Combo
+                </h3>
+                <div className="flex items-center space-x-2 justify-center mb-2">
+                  <span className="line-through text-sm text-gray-400">₹{mrp}</span>
+                  <span className="text-lg font-bold text-green-600">₹{price}</span>
+                </div>
+                <button
+                  onClick={() => {
+                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    cart.push({ name, price, combo, id: Date.now() });
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    window.dispatchEvent(new CustomEvent('cartUpdated'));
+                  }}
+                  className="bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-700 mt-auto transition"
+                >
+                  ADD TO CART
+                </button>
+              </div>
+            </div>
+          </SwiperSlide>
+        );
+      })}
+    </Swiper>
+  </div>
+);
 
 
 const DisplayCards = () => {
@@ -473,7 +536,7 @@ const DisplayCards = () => {
   ];
 
   return (
-    <div id="products" className="overflow-hidden p-6 space-y-12 bg-gradient-to-br from-purple-50 to-blue-50">
+    <div id="products" className="overflow-hidden p-6 bg-gradient-to-br from-purple-50 to-blue-50">
 
     {showPopup && (
       <div
@@ -539,11 +602,12 @@ const DisplayCards = () => {
       {/* Heading */}
       <div>
         <h2 className="text-5xl font-extrabold text-center mb-3 text-[#5d3c77] tracking-tight leading-tight">
-          Bring Home Natural Freshness.
+          Bring Home Natural Freshness
         </h2>
         <h3 className="text-lg font-medium text-center text-gray-600">
           Get our best-selling Camph Air Pack + FREE Tester — Only for early birds!
         </h3>
+
       </div>
 
       <div>
@@ -560,9 +624,25 @@ const DisplayCards = () => {
 
       {/* Combo Mix */}
       <div>
-        <h2 className="text-2xl font-bold text-center mb-6">Camph Airr Combo Collection</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-8">
-          {showMoreCombos ? generateCards(mixedCombos) : generateCards(mixedCombos.slice(0, 9))}
+        <h2 className="text-3xl font-bold text-center my-6">Aroma Duo/Trio</h2>
+        <h3 className="text-lg font-medium text-center text-gray-600">
+          Experience our refreshing aroma. Every first pack comes with a free 30g tester in a surprise scent!
+        </h3>
+        <div className="">
+          <ComboPackSlider
+            packs={mixedCombos.filter((c) => c.length === 2)}
+            flavorImages={flavorImages}
+            flavorPrices={flavorPrices}
+            flavorMRPs={flavorMRPs}
+          />
+        </div>
+        <div className="">
+          <ComboPackSlider
+            packs={mixedCombos.filter((c) => c.length === 3)}
+            flavorImages={flavorImages}
+            flavorPrices={flavorPrices}
+            flavorMRPs={flavorMRPs}
+          />
         </div>
         {mixedCombos.length > 9 && (
           <div className="flex justify-center mt-4">

@@ -794,7 +794,7 @@ const Checkout = () => {
                 )}
 
                 {/* Selected Fragrances - Only show for single products */}
-                {!orderDetails?.isBundle && orderDetails?.fragrances && orderDetails.fragrances.length > 0 && (
+                {/* {!orderDetails?.isBundle && orderDetails?.fragrances && orderDetails.fragrances.length > 0 && (
                     <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-100">
                         <h4 className="font-semibold text-gray-800 mb-2">Selected Fragrances:</h4>
                         <div className="space-y-1">
@@ -808,7 +808,7 @@ const Checkout = () => {
                             ))}
                         </div>
                     </div>
-                )}
+                )} */}
 
                 {/* Pricing */}
                 <div className="space-y-2">

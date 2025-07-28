@@ -27,10 +27,10 @@ const PromoBanner = () => {
     <div className="w-full bg-[#5d3c77] text-white py-2 overflow-hidden">
       <div className="animate-marquee whitespace-nowrap text-sm sm:text-base font-semibold tracking-wide">
         <span className="mx-10">
-          Get our best-selling Camph Air Pack + FREE Tester — Only for early birds!
+          Discover Your Free Tester
         </span>
         <span className="mx-10">
-          Get our best-selling Camph Air Pack + FREE Tester — Only for early birds!
+          Your First Whiff, On Us!
         </span>
         <span className="mx-10">
           Get our best-selling Camph Air Pack + FREE Tester — Only for early birds!
