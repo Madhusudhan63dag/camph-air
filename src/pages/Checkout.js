@@ -42,7 +42,8 @@ const generateOrderNumber = () => {
     return `CA-${timestamp}-${random}`;
 };
 
-const SHIPPING_CHARGE = 0; // Updated to INR
+const SHIPPING_CHARGE = 0; // Default shipping charge
+const COD_SHIPPING_CHARGE = 50; // Additional shipping charge for COD orders
 
 const COUNTRIES = [
     { code: "AF", name: "Afghanistan" },
@@ -413,9 +414,8 @@ const PaymentMethodSelector = ({ selectedMethod, onSelect }) => {
                     className="h-5 w-5 text-indigo-600"
                 />
                 <div className="ml-4 flex items-center">
-                    <SiRazorpay className="text-blue-500 text-3xl mr-2" />
-                    <span className="font-medium text-gray-900">Razorpay</span>
-                    <span className="ml-2 text-sm text-gray-600">(Cards, UPI, Net Banking)</span>
+                    {/* <SiRazorpay className="text-blue-500 text-3xl mr-2" /> */}
+                    <span className="ml-2 text-sm text-gray-600">Cards, UPI, Net Banking</span>
                 </div>
             </label>
             
@@ -433,7 +433,7 @@ const PaymentMethodSelector = ({ selectedMethod, onSelect }) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
                     </svg>
                     <span className="font-medium text-gray-900">Cash On Delivery</span>
-                    <span className="ml-2 text-sm text-gray-600">(Pay when you receive)</span>
+                    <span className="ml-2 text-sm text-gray-600">(Pay when you receive + ₹50 shipping)</span>
                 </div>
             </label>
         </div>
@@ -699,6 +699,11 @@ const Checkout = () => {
 
     const [formErrors, setFormErrors] = useState({});
 
+    // Helper function to calculate shipping charge based on payment method
+    const getCurrentShippingCharge = () => {
+        return paymentMethod === 'cod' ? COD_SHIPPING_CHARGE : SHIPPING_CHARGE;
+    };
+
     const [currentStep, setCurrentStep] = useState(1);
     const [animateForm, setAnimateForm] = useState(false);
 
@@ -818,8 +823,17 @@ const Checkout = () => {
                     <div className="flex justify-between py-2 border-t border-gray-200">
                         <span className="font-medium text-gray-700">Shipping:</span>
                         <div className="text-sm text-gray-500 mt-1 flex flex-col items-end gap-2">
-                            <span className="font-semibold text-green-600">FREE</span>
-                            <span>(Delivery within 5-7 business days)</span>
+                            {paymentMethod === 'cod' ? (
+                                <>
+                                    <span className="font-semibold text-orange-600">₹{COD_SHIPPING_CHARGE}</span>
+                                    <span>(COD charges apply)</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="font-semibold text-green-600">FREE</span>
+                                    <span>(Delivery within 5-7 business days)</span>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -827,7 +841,7 @@ const Checkout = () => {
                     <div className="flex justify-between py-4 border-t border-gray-200 mt-2">
                         <span className="text-lg font-bold text-gray-800">Total:</span>
                         <span className="text-lg font-bold text-indigo-700">
-                            {formatCurrency(orderDetails?.totalAmount + SHIPPING_CHARGE)}
+                            {formatCurrency(orderDetails?.totalAmount + getCurrentShippingCharge())}
                         </span>
                     </div>
                 </div>
@@ -881,7 +895,7 @@ const sendOrderConfirmationEmail = async (paymentDetails) => {
             orderNumber: orderNumber,
             productName: orderDetails.productName,
             quantity: orderDetails.quantity,
-            totalAmount: (orderDetails.totalAmount + SHIPPING_CHARGE).toFixed(2),
+            totalAmount: (orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2),
             currency: '₹',
             paymentMethod: paymentDetails.payment_method || 'Online Payment'
         };
@@ -948,7 +962,7 @@ const sendOrderConfirmationEmail = async (paymentDetails) => {
                     Order Number: ${orderNumber}
                     Product: ${orderDetails.productName}
                     Quantity: ${orderDetails.quantity}
-                    Total: ${formatCurrency(orderDetails.totalAmount + SHIPPING_CHARGE)}
+                    Total: ${formatCurrency(orderDetails.totalAmount + getCurrentShippingCharge())}
                     
                     Customer Information:
                     Name: ${formData.firstName} ${formData.lastName}
@@ -1004,7 +1018,7 @@ const trackAbandonedOrder = () => {
                 orderNumber: `CA-CART-${Date.now().toString().slice(-6)}`,
                 productName: orderDetails.productName,
                 quantity: orderDetails.quantity,
-                totalAmount: (orderDetails.totalAmount + SHIPPING_CHARGE).toFixed(2),
+                totalAmount: (orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2),
                 currency: '₹',
                 isBundle: orderDetails.isBundle || false,
                 cartItems: orderDetails.cartItems || null
@@ -1158,7 +1172,7 @@ const handleRazorpayPayment = async () => {
     
     try {
         // Calculate total amount with shipping
-        const totalAmount = orderDetails.totalAmount + SHIPPING_CHARGE;
+        const totalAmount = orderDetails.totalAmount + getCurrentShippingCharge();
         
         // First create order on server
         const orderData = await apiCall('/create-order', {
@@ -1357,7 +1371,7 @@ const onPaymentSuccess = async (order) => {
         orderDate: new Date().toLocaleDateString('en-IN'),
         productName: orderDetails.productName,
         quantity: orderDetails.quantity,
-        totalAmount: orderDetails.totalAmount + SHIPPING_CHARGE,
+        totalAmount: orderDetails.totalAmount + getCurrentShippingCharge(),
         paymentMethod: order.payment_method || (order.method === 'cod' ? 'Cash on Delivery' : 'Online Payment'),
         transactionId: order.id || order.transactionId || 'COD-' + Date.now(),
         customerName: `${formData.firstName} ${formData.lastName}`,
@@ -1885,7 +1899,7 @@ const onPaymentSuccess = async (order) => {
                                             ) : (
                                                 <>
                                                     <SiRazorpay className="mr-2 text-lg" />
-                                                    Pay ₹ {(orderDetails.totalAmount + SHIPPING_CHARGE).toFixed(2)}
+                                                    Pay ₹ {(orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2)}
                                                 </>
                                             )}
                                         </button>
@@ -1901,7 +1915,7 @@ const onPaymentSuccess = async (order) => {
                                                     <span className="font-medium">Cash on Delivery Information</span>
                                                 </div>
                                                 <p className="text-yellow-700 text-sm ml-7">
-                                                    Pay with cash upon delivery. Our delivery agent will collect the payment when your order arrives.
+                                                    Pay with cash upon delivery. Our delivery agent will collect the payment when your order arrives. A shipping charge of ₹50 applies for COD orders.
                                                 </p>
                                             </div>
                                             
@@ -1927,7 +1941,7 @@ const onPaymentSuccess = async (order) => {
                                                             <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                                                             <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
                                                         </svg>
-                                                        Place Order - ₹ {(orderDetails.totalAmount + SHIPPING_CHARGE).toFixed(2)}
+                                                        Place Order - ₹ {(orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2)}
                                                     </>
                                                 )}
                                             </button>
