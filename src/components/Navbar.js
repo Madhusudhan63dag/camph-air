@@ -48,7 +48,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gradient-to-r from-[#a18cd1] to-[#fbc2eb] navbar shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo Section */}
           <a href="/" className="flex items-center space-x-2">
@@ -66,7 +66,7 @@ const Navbar = () => {
                 key={link.id}
                 href={`/#${link.id}`}
                 className="flex items-center text-[#5d3c77] hover:text-[#3b275c] font-medium space-x-1">
-                <img src={icons[link.id]} alt="" className="h-5 w-5" />
+                {/* <img src={icons[link.id]} alt="" className="h-5 w-5" /> */}
                 <span>{link.label}</span>
               </a>
             ))}

@@ -27,6 +27,12 @@ import banner from '../assets/banner6.webp';
 
 
 const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => {
+  const [selectedPacks, setSelectedPacks] = useState({}); // { "Lavender": 1, ... }
+
+  const handlePackSelect = (flavor, count) => {
+    setSelectedPacks((prev) => ({ ...prev, [flavor]: count }));
+  };
+
   return (
     <div className="w-full max-w-screen-xl mx-auto px-4 py-10">
       <Swiper
@@ -46,6 +52,7 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
           const image = flavorImages[flavor][0];
           const price = flavorPrices[flavor];
           const mrp = flavorMRPs[flavor];
+          const selectedCount = selectedPacks[flavor] || 1;
 
           return (
             <SwiperSlide key={idx}>
@@ -58,8 +65,7 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
                     className="object-contain w-full h-full"
                   />
                 </div>
-                <div className='p-5'>
-                  
+                <div className="p-5">
                   {/* Title */}
                   <h3 className="text-sm font-semibold text-gray-700 mb-1">
                     {flavor} Camphor Cone
@@ -88,12 +94,18 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
                     </span>
                   </div>
 
+                  {/* Pack Selector */}
                   <div className="flex items-center space-x-2 text-sm mb-4">
                     <span className="text-gray-600">Pack:</span>
                     {[1, 2, 3].map((count) => (
                       <button
                         key={count}
-                        className="w-7 h-7 rounded-full border border-gray-300 hover:border-blue-500 hover:text-blue-500 text-gray-600 text-sm font-medium"
+                        onClick={() => handlePackSelect(flavor, count)}
+                        className={`w-7 h-7 rounded-full border text-sm font-medium ${
+                          selectedCount === count
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
+                        }`}
                       >
                         {count}
                       </button>
@@ -101,12 +113,23 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
                   </div>
 
                   {/* Add to Cart */}
-                  <button className="bg-blue-600  text-white text-sm font-medium p-2 rounded-lg hover:bg-blue-700 transition mt-auto"
+                  <button
+                    className="bg-blue-600 text-white text-sm font-medium p-2 rounded-lg hover:bg-blue-700 transition mt-auto"
                     onClick={() => {
-                      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                      cart.push({ name: flavor, price, combo: [flavor], id: Date.now() });
-                      localStorage.setItem('cart', JSON.stringify(cart));
-                      window.dispatchEvent(new CustomEvent('cartUpdated'));
+                      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                      for (let i = 0; i < selectedCount; i++) {
+                        cart.push({
+                          name: flavor,
+                          price,
+                          quantity: 1,
+                          combo: [flavor],
+                          id: Date.now() + i,
+                        });
+                      }
+
+                      localStorage.setItem("cart", JSON.stringify(cart));
+                      window.dispatchEvent(new CustomEvent("cartUpdated"));
                     }}
                   >
                     ADD TO CART
@@ -120,8 +143,6 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
     </div>
   );
 };
-
-
 
 const REVIEWS = [
   "⭐⭐⭐⭐⭐\n\n“Keeps my wardrobe fresh for weeks!”",
@@ -292,143 +313,184 @@ const flavorMRPs = {
 
 const flavors = Object.keys(flavorImages);
 
-const generateCards = (packs) => {
-  return packs.map((combo, index) => {
-    const name = combo.join(' + ');
-    // Set fixed price for combo of 2, otherwise calculate normally
-    const price = combo.length === 2 ? 399 : combo.reduce((total, f) => total + flavorPrices[f], 0);
-    const mrp = combo.reduce((total, f) => total + flavorMRPs[f], 0);
-    let displayImage;
-    if (combo.length === 3) {
-      displayImage = threePackImages[name] || flavorImages[combo[0]];
-    } else if (combo.length === 2) {
-      displayImage = comboImages[name] || flavorImages[combo[0]];
-    } else {
-      displayImage = flavorImages[combo[0]];
-    }
-    return (
-      <div
-        key={index}
-        className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200 bg-white hover:shadow-3xl transition-transform duration-300 hover:-translate-y-2 group flex flex-col items-center"
-        style={{ width: 380, maxWidth: '100%' }}
-        >
-        {/* Image Section */}
-        <div className="flex justify-center items-center w-full bg-gradient-to-br from-purple-50 to-white mb-2">
-          <div className="w-full max-w-[400px] aspect-square relative">
-            <img
-              src={displayImage[0]}
-              alt={name}
-              className="rounded-2xl w-full h-full object-cover shadow-lg transition-opacity duration-500 group-hover:opacity-0"
-              style={{ border: "4px solid #ece9ff", background: "#fff" }}
-            />
-            <img
-              src={displayImage[1]}
-              alt={name}
-              className="rounded-2xl w-full h-full object-cover shadow-lg transition-opacity duration-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100"
-              style={{ border: "4px solid #ece9ff", background: "#fff" }}
-            />
-          </div>
-        </div>
-        {/* Text Section */}
-        <div className="px-7 pt-4 pb-5 flex flex-col flex-1 items-center w-full">
-          <h3 className="text-xl font-extrabold text-[#5d3c77] mb-1 tracking-tight text-center">
-            {name}{combo.length > 1 ? ' Combo' : ''}
-          </h3>
-          <div className="text-gray-400 text-sm line-through mb-1">MRP ₹{mrp}</div>
-          <div className="text-green-600 font-bold text-2xl mb-2">Now ₹{price}</div>
-          <button
-            onClick={() => {
-                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                    const newItem = { name, price, combo, id: Date.now() };
-                    cart.push(newItem);
-                    localStorage.setItem('cart', JSON.stringify(cart));
-                    window.dispatchEvent(new CustomEvent('cartUpdated'));
-                    const button = document.activeElement;
-                    const originalText = button.textContent;
-                    button.textContent = 'Added!';
-                    button.style.backgroundColor = '#10b981';
-                    setTimeout(() => {
-                      button.textContent = originalText;
-                      button.style.backgroundColor = '';
-                    }, 1000);
-                  }}
-            className="mt-4 bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] hover:from-[#472c5d] hover:to-[#3a2248] text-white text-base font-semibold px-6 py-2 rounded-full shadow transition-all duration-200"
-          >
-            Add to Cart
-          </button>
-        </div>
-        </div>
 
-          );
-    });
-};
+// const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => (
+//   <div className="w-full px-4 py-5">
+//     <Swiper
+//       navigation
+//       modules={[Navigation]}
+//       spaceBetween={20}
+//       slidesPerView={1}
+//       loop
+//       breakpoints={{
+//         640: { slidesPerView: 2 },
+//         768: { slidesPerView: 3 },
+//         1024: { slidesPerView: 4 },
+//       }}
+//       className="w-full"
+//     >
+//       {packs.map((combo, idx) => {
+//         const name = combo.join(' + ');
+//         const price = combo.length === 2 ? 399 : combo.reduce((t, f) => t + flavorPrices[f], 0);
+//         const mrp = combo.reduce((t, f) => t + flavorMRPs[f], 0);
+//         let displayImage;
 
-const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => (
-  <div className="w-full px-4 py-5">
-    <Swiper
-      navigation
-      modules={[Navigation]}
-      spaceBetween={20}
-      slidesPerView={1}
-      loop
-      breakpoints={{
-        640: { slidesPerView: 2 },
-        768: { slidesPerView: 3 },
-        1024: { slidesPerView: 4 },
-      }}
-      className="w-full"
-    >
-      {packs.map((combo, idx) => {
-        const name = combo.join(' + ');
-        const price = combo.length === 2 ? 399 : combo.reduce((t, f) => t + flavorPrices[f], 0);
-        const mrp = combo.reduce((t, f) => t + flavorMRPs[f], 0);
-        let displayImage;
+//         if (combo.length === 3) {
+//           displayImage = threePackImages[name] || flavorImages[combo[0]];
+//         } else if (combo.length === 2) {
+//           displayImage = comboImages[name] || flavorImages[combo[0]];
+//         } else {
+//           displayImage = flavorImages[combo[0]];
+//         }
 
-        if (combo.length === 3) {
-          displayImage = threePackImages[name] || flavorImages[combo[0]];
-        } else if (combo.length === 2) {
-          displayImage = comboImages[name] || flavorImages[combo[0]];
-        } else {
-          displayImage = flavorImages[combo[0]];
-        }
+//         return (
+//           <SwiperSlide key={idx}>
+//             <div className="bg-white h-full flex flex-col shadow-lg rounded-2xl overflow-hidden">
+//               <div className="relative w-full overflow-hidden mb-3">
+//                 <img
+//                   src={displayImage[0]}
+//                   alt={name}
+//                   className="object-contain w-full h-full"
+//                 />
+//               </div>
+//               <div className='p-5 flex flex-col flex-1'>
+//                 <h3 className="text-sm font-semibold text-gray-700 mb-1 text-center">
+//                   {name} Combo
+//                 </h3>
+//                 <div className="flex items-center space-x-2 justify-center mb-2">
+//                   <span className="line-through text-sm text-gray-400">₹{mrp}</span>
+//                   <span className="text-lg font-bold text-green-600">₹{price}</span>
+//                 </div>
+//                 <button
+//                   onClick={() => {
+//                     let cart = JSON.parse(localStorage.getItem('cart')) || [];
+//                     cart.push({ name, price, combo, id: Date.now() });
+//                     localStorage.setItem('cart', JSON.stringify(cart));
+//                     window.dispatchEvent(new CustomEvent('cartUpdated'));
+//                   }}
+//                   className="bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-700 mt-auto transition"
+//                 >
+//                   ADD TO CART
+//                 </button>
+//               </div>
+//             </div>
+//           </SwiperSlide>
+//         );
+//       })}
+//     </Swiper>
+//   </div>
+// );
 
-        return (
-          <SwiperSlide key={idx}>
-            <div className="bg-white h-full flex flex-col shadow-lg rounded-2xl overflow-hidden">
-              <div className="relative w-full overflow-hidden mb-3">
-                <img
-                  src={displayImage[0]}
-                  alt={name}
-                  className="object-contain w-full h-full"
-                />
-              </div>
-              <div className='p-5 flex flex-col flex-1'>
-                <h3 className="text-sm font-semibold text-gray-700 mb-1 text-center">
-                  {name} Combo
-                </h3>
-                <div className="flex items-center space-x-2 justify-center mb-2">
-                  <span className="line-through text-sm text-gray-400">₹{mrp}</span>
-                  <span className="text-lg font-bold text-green-600">₹{price}</span>
+
+const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => {
+  const [comboQuantities, setComboQuantities] = useState({}); // { 'Original + Lavender': 2 }
+
+  const handleComboSelect = (name, count) => {
+    setComboQuantities((prev) => ({ ...prev, [name]: count }));
+  };
+
+  return (
+    <div className="w-full px-4 py-5">
+      <Swiper
+        navigation
+        modules={[Navigation]}
+        spaceBetween={20}
+        slidesPerView={1}
+        loop
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+        }}
+        className="w-full"
+      >
+        {packs.map((combo, idx) => {
+          const name = combo.join(" + ");
+          const quantity = comboQuantities[name] || 1;
+          const price = combo.length === 2 ? 399 : combo.reduce((t, f) => t + flavorPrices[f], 0);
+          const mrp = combo.reduce((t, f) => t + flavorMRPs[f], 0);
+
+          let displayImage;
+          if (combo.length === 3) {
+            displayImage = threePackImages[name] || flavorImages[combo[0]];
+          } else if (combo.length === 2) {
+            displayImage = comboImages[name] || flavorImages[combo[0]];
+          } else {
+            displayImage = flavorImages[combo[0]];
+          }
+
+          return (
+            <SwiperSlide key={idx}>
+              <div className="bg-white h-full flex flex-col shadow-lg rounded-2xl overflow-hidden">
+                {/* Image */}
+                <div className="relative w-full overflow-hidden mb-3">
+                  <img
+                    src={displayImage[0]}
+                    alt={name}
+                    className="object-contain w-full h-full"
+                  />
                 </div>
-                <button
-                  onClick={() => {
-                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                    cart.push({ name, price, combo, id: Date.now() });
-                    localStorage.setItem('cart', JSON.stringify(cart));
-                    window.dispatchEvent(new CustomEvent('cartUpdated'));
-                  }}
-                  className="bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-700 mt-auto transition"
-                >
-                  ADD TO CART
-                </button>
+
+                {/* Content */}
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-1 text-center">
+                    {name} Combo
+                  </h3>
+
+                  <div className="flex items-center space-x-2 justify-center mb-2">
+                    <span className="line-through text-sm text-gray-400">₹{mrp}</span>
+                    <span className="text-lg font-bold text-green-600">₹{price}</span>
+                  </div>
+
+                  {/* Pack Selector */}
+                  <div className="flex justify-center items-center space-x-2 text-sm mb-4">
+                    <span className="text-gray-600">Pack:</span>
+                    {[1, 2, 3].map((count) => (
+                      <button
+                        key={count}
+                        onClick={() => handleComboSelect(name, count)}
+                        className={`w-7 h-7 rounded-full border text-sm font-medium ${
+                          quantity === count
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
+                        }`}
+                      >
+                        {count}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Add to Cart */}
+                  <button
+                    onClick={() => {
+                      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                      for (let i = 0; i < quantity; i++) {
+                        cart.push({
+                          name,
+                          price,
+                          combo,
+                          quantity: 1,
+                          id: Date.now() + i,
+                        });
+                      }
+
+                      localStorage.setItem("cart", JSON.stringify(cart));
+                      window.dispatchEvent(new CustomEvent("cartUpdated"));
+                    }}
+                    className="bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-700 mt-auto transition"
+                  >
+                    ADD TO CART
+                  </button>
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-        );
-      })}
-    </Swiper>
-  </div>
-);
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+    </div>
+  );
+};
 
 
 const DisplayCards = () => {
