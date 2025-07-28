@@ -97,7 +97,7 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
                     One Pack. Two Fragrances. Zero Chemicals.<br/>
                     Includes a FREE tester of <strong>{freeTesters[slide]}</strong> fragrance!
                   </p>
-                  <ul className="mb-5 text-gray-600 text-sm list-disc pl-5 space-y-2">
+                  <ul className="mb-5 text-gray-600 text-sm text-left pl-5 space-y-2">
                     <li>Long-lasting & natural</li>
                     <li>No burning, no mess—just open & enjoy</li>
                     <li>Safe for any room, wardrobe, or car</li>
@@ -298,7 +298,8 @@ const flavors = Object.keys(flavorImages);
 const generateCards = (packs) => {
   return packs.map((combo, index) => {
     const name = combo.join(' + ');
-    const price = combo.reduce((total, f) => total + flavorPrices[f], 0);
+    // Set fixed price for combo of 2, otherwise calculate normally
+    const price = combo.length === 2 ? 399 : combo.reduce((total, f) => total + flavorPrices[f], 0);
     const mrp = combo.reduce((total, f) => total + flavorMRPs[f], 0);
     let displayImage;
     if (combo.length === 3) {
@@ -556,7 +557,6 @@ const DisplayCards = () => {
       </div>
       <PromoBanner2 />
 
-      <ReviewsSlider />
 
       {/* Combo Mix */}
       <div>
@@ -575,6 +575,7 @@ const DisplayCards = () => {
           </div>
         )}
       </div>
+      <ReviewsSlider />
       {/* Special Combo of 4 Section */}
       <div>
         <SpecialComboOffer navigate={navigate} />
