@@ -2,15 +2,15 @@ import React from 'react';
 import logo from '../assets/logo.png';
 
 const socialLinks = [
-  {
-    name: 'YouTube',
-    url: 'https://www.youtube.com/@camphairr', // <-- Replace with your actual channel
-    icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-        <path d="M23.498 6.186a2.999 2.999 0 0 0-2.112-2.112C19.239 3.5 12 3.5 12 3.5s-7.239 0-9.386.574a3 3 0 0 0-2.112 2.112C0 8.334 0 12 0 12s0 3.666.502 5.813a2.999 2.999 0 0 0 2.112 2.112C4.761 20.5 12 20.5 12 20.5s7.239 0 9.386-.575a2.999 2.999 0 0 0 2.112-2.112C24 15.666 24 12 24 12s0-3.666-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-      </svg>
-    ),
-  },
+  // {
+  //   name: 'YouTube',
+  //   url: 'https://www.youtube.com/@camphairr', // <-- Replace with your actual channel
+  //   icon: (
+  //     <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
+  //       <path d="M23.498 6.186a2.999 2.999 0 0 0-2.112-2.112C19.239 3.5 12 3.5 12 3.5s-7.239 0-9.386.574a3 3 0 0 0-2.112 2.112C0 8.334 0 12 0 12s0 3.666.502 5.813a2.999 2.999 0 0 0 2.112 2.112C4.761 20.5 12 20.5 12 20.5s7.239 0 9.386-.575a2.999 2.999 0 0 0 2.112-2.112C24 15.666 24 12 24 12s0-3.666-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  //     </svg>
+  //   ),
+  // },
   {
     name: 'Instagram',
     url: 'https://www.instagram.com/camphairr', // <-- Replace with your actual page

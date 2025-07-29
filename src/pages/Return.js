@@ -25,7 +25,7 @@ const Return = () => {
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Refund Process</h2>
       <p className="mb-4">
-        Once the returned product is received and verified, the eligible refund will be processed. The amount will be credited to the original source of payment within <strong>10 working days</strong>.
+        Once the returned product is received and verified, the eligible refund will be processed. The amount will be credited to the original source of payment within <strong>15 working days</strong>.
       </p>
 
       <p className="mt-10 text-sm text-gray-500">

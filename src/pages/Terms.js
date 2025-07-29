@@ -6,7 +6,7 @@ const Terms = () => {
       <h1 className="text-3xl font-bold mb-6 text-[#5d3c77]">Terms & Conditions</h1>
 
       <p className="mb-4">
-        Welcome to <strong>Camph Airr</strong>! These terms and conditions outline the rules and regulations for the use of the Camph Airr website, located at <a href="https://camphairr.in" className="text-blue-600 underline">https://glowglaz.com</a>, a product of Camphor-Based Air Freshener.
+        Welcome to <strong>Camph Airr</strong>! These terms and conditions outline the rules and regulations for the use of the Camph Airr website, located at <a href="https://camphairr.com" className="text-blue-600 underline">https://camphairr.com</a>, a product of Camphor-Based Air Freshener.
       </p>
 
       <p className="mb-4">

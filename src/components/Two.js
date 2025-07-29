@@ -148,31 +148,36 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
 };
 
 const REVIEWS = [
-  "⭐⭐⭐⭐⭐\n\n“Keeps my wardrobe fresh for weeks!”",
-  "⭐⭐⭐⭐⭐\n\n“Loved the surprise tester flavour!”",
-  "⭐⭐⭐⭐⭐\n\n“No chemicals — perfect for kids’ rooms.”",
+  "“Keeps my wardrobe fresh for weeks!”",
+  "“Loved the surprise tester flavour!”",
+  "“No chemicals — perfect for kids’ rooms.”",
 ];
 
-const SLIDE_TIME = 3500; // 3.5 seconds per review
+const SLIDE_TIME = 3500; 
 
-const ReviewsSlider = () => {
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrent((prev) => (prev + 1) % REVIEWS.length);
-    }, SLIDE_TIME);
-
-    return () => clearTimeout(timer);
-  }, [current]);
-
+function ReviewsSlider() {
   return (
-    <div className="w-full max-w-md mx-auto text-center text-gray-800 my-8 p-4">
-      <p className="whitespace-pre-line text-lg font-medium">{REVIEWS[current]}</p>
+    <div className="w-full max-w-xl mx-auto px-4 py-8">
+      {/* <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">What our customers say</h2> */}
+
+      <Swiper
+        modules={[Autoplay, Pagination]}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        pagination={{ clickable: true }}
+        loop={true}
+        className="rounded-xl shadow-lg bg-white"
+      >
+        {REVIEWS.map((review, index) => (
+          <SwiperSlide key={index}>
+            <div className="p-6 text-center text-gray-700 text-lg font-medium min-h-[120px] flex items-center justify-center">
+              <p className="italic">{review}</p>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
-};
-
+}
 
 const PromoBanner2 = () => {
   return (
@@ -198,8 +203,6 @@ const PromoBanner2 = () => {
     </div>
   );
 };
-
-
 
 const comboImages = {
   'Original + Lavender': [originalLavender, originalLavender],
@@ -245,75 +248,6 @@ const flavorMRPs = {
 };
 
 const flavors = Object.keys(flavorImages);
-
-
-// const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => (
-//   <div className="w-full px-4 py-5">
-//     <Swiper
-//       navigation
-//       modules={[Navigation]}
-//       spaceBetween={20}
-//       slidesPerView={1}
-//       loop
-//       breakpoints={{
-//         640: { slidesPerView: 2 },
-//         768: { slidesPerView: 3 },
-//         1024: { slidesPerView: 4 },
-//       }}
-//       className="w-full"
-//     >
-//       {packs.map((combo, idx) => {
-//         const name = combo.join(' + ');
-//         const price = combo.length === 2 ? 399 : combo.reduce((t, f) => t + flavorPrices[f], 0);
-//         const mrp = combo.reduce((t, f) => t + flavorMRPs[f], 0);
-//         let displayImage;
-
-//         if (combo.length === 3) {
-//           displayImage = threePackImages[name] || flavorImages[combo[0]];
-//         } else if (combo.length === 2) {
-//           displayImage = comboImages[name] || flavorImages[combo[0]];
-//         } else {
-//           displayImage = flavorImages[combo[0]];
-//         }
-
-//         return (
-//           <SwiperSlide key={idx}>
-//             <div className="bg-white h-full flex flex-col shadow-lg rounded-2xl overflow-hidden">
-//               <div className="relative w-full overflow-hidden mb-3">
-//                 <img
-//                   src={displayImage[0]}
-//                   alt={name}
-//                   className="object-contain w-full h-full"
-//                 />
-//               </div>
-//               <div className='p-5 flex flex-col flex-1'>
-//                 <h3 className="text-sm font-semibold text-gray-700 mb-1 text-center">
-//                   {name} Combo
-//                 </h3>
-//                 <div className="flex items-center space-x-2 justify-center mb-2">
-//                   <span className="line-through text-sm text-gray-400">₹{mrp}</span>
-//                   <span className="text-lg font-bold text-green-600">₹{price}</span>
-//                 </div>
-//                 <button
-//                   onClick={() => {
-//                     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-//                     cart.push({ name, price, combo, id: Date.now() });
-//                     localStorage.setItem('cart', JSON.stringify(cart));
-//                     window.dispatchEvent(new CustomEvent('cartUpdated'));
-//                   }}
-//                   className="bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-700 mt-auto transition"
-//                 >
-//                   ADD TO CART
-//                 </button>
-//               </div>
-//             </div>
-//           </SwiperSlide>
-//         );
-//       })}
-//     </Swiper>
-//   </div>
-// );
-
 
 const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => {
   const [comboQuantities, setComboQuantities] = useState({}); // { 'Original + Lavender': 2 }
@@ -424,7 +358,6 @@ const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => {
     </div>
   );
 };
-
 
 const DisplayCards = () => {
   const navigate = useNavigate();

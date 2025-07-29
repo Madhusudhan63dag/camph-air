@@ -83,7 +83,7 @@ const SpecialComboOffer = ({ navigate, flavorImages, flavorMRPs }) => {
 
         <div className="flex justify-center">
           <button
-            onClick={() => setShowPopup(true)}
+            onClick={() => handleConfirmPrepay()}
             className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition"
           >
             Grab This Combo Now

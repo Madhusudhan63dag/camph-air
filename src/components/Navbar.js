@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import logo from '../assets/logo.png';
 import one from '../assets/icons/1.png';
 import two from '../assets/icons/2.png';
-import three from '../assets/icons/3.png';
 import four from '../assets/icons/4.png';
 import five from '../assets/icons/5.png';
 import six from '../assets/icons/6.png';
@@ -11,7 +10,6 @@ import Cart from './Cart';
 const icons = {
   banner: one,
   products: five,
-  // flavours: three,
   new: four,
   about: two,
   cart: six,
@@ -66,7 +64,7 @@ const Navbar = () => {
                 key={link.id}
                 href={`/#${link.id}`}
                 className="flex items-center text-[#5d3c77] hover:text-[#3b275c] font-medium space-x-1">
-                {/* <img src={icons[link.id]} alt="" className="h-5 w-5" /> */}
+                <img src={icons[link.id]} alt="" className="h-5 w-5" />
                 <span>{link.label}</span>
               </a>
             ))}

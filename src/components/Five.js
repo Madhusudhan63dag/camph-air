@@ -29,7 +29,7 @@ const Five = () => {
                 Perfect for Every Corner of Your Life
               </h3>
               <p className="text-gray-700 text-base leading-relaxed">
-                Light, versatile, and incredibly soothing — here’s where Camph Airr truly shines:
+                Light, versatile, and incredibly soothing — here’s where we truly shine:
               </p>
               <ul className="list-disc list-inside mt-3 text-gray-600 text-sm md:text-base space-y-1">
                 <li>Bedrooms – unwind and drift into peaceful sleep</li>

@@ -17,7 +17,7 @@ const reviews = [
   {
     name: 'Meera Rajan',
     location: 'Coimbatore, Tamil Nadu',
-    review: 'Jasmine has this soft floral feel that lingers in my vanity area. The scent is not overwhelming, and the camphor undertone keeps the space fresh and clean.',
+    review: 'Jasmine has this soft floral feel that lingers in my vanity area. The scent is overwhelming, and the camphor undertone keeps the space fresh and clean.',
     image: jasmineImg,
     product: 'Jasmine Fragrance',
     stars: 5,
@@ -33,11 +33,27 @@ const reviews = [
   {
     name: 'Vishnu Reddy',
     location: 'Vijayawada, Andhra Pradesh',
-    review: 'I ordered the original camphor for my bedroom. Every time I enter, I get a refreshing wave of purity. Also, my clothes don’t smell musty anymore! feel fresh and clean.',
+    review: 'I ordered the original camphor for my wardrobe. Every time I enter, I get a refreshing wave of purity. Also, my clothes don’t smell musty anymore! feel fresh and clean.',
     image: originalImg,
     product: 'Original Fragrance',
     stars: 5,
   },
+  {
+    name: 'Revathi Iyer',
+    location: 'Bengaluru, Karnataka',
+    review: 'Lavender surprised me! It’s not too strong, yet fills my wardrobe with a calming, spa-like scent. My clothes smell amazing every time I open it. Totally worth it.',
+    // image: lavenderImg,
+    product: 'Lavender Fragrance',
+    stars: 5,
+  },
+  {
+    name: 'Sathish Kumar',
+    location: 'Madurai, Tamil Nadu',
+    review: 'The Rose fragrance is fresh and traditional. I placed it in my car, and it now feels like a garden ride every morning. Friends asked what perfume I used!',
+    // image: roseImg,
+    product: 'Rose Fragrance',
+    stars: 5,
+  }
 ];
 
 const Six = () => {
