@@ -24,6 +24,7 @@ import combo3 from '../assets/combo/8.webp';
 import combo4 from '../assets/combo/9.webp';
 import combo4Image from '../assets/combo/10.webp';
 import banner from '../assets/banner6.webp';
+import SpecialComboOffer from './SpecialComboOffer';
 
 
 
@@ -200,75 +201,169 @@ const PromoBanner2 = () => {
 
 
 
-const SpecialComboOffer = ({ navigate }) => {
+// const SpecialComboOffer = ({ navigate }) => {
   
-  const handleGrabCombo = () => {
-    // All 5 flavors
-    const allFlavors = Object.keys(flavorImages);
-    const comboPrice = 1399; // Price for all 5 flavors
-    const comboMRP = allFlavors.reduce((total, flavor) => total + flavorMRPs[flavor], 0);
+//   const handleGrabCombo = () => {
+//     // All 5 flavors
+//     const allFlavors = Object.keys(flavorImages);
+//     const comboPrice = 1399; // Price for all 5 flavors
+//     const comboMRP = allFlavors.reduce((total, flavor) => total + flavorMRPs[flavor], 0);
     
-    const comboItem = {
-      name: 'Combo of 5 Fragrances',
-      price: comboPrice,
-      mrp: comboMRP,
-      combo: allFlavors,
-      id: Date.now(),
-      quantity: 1
-    };
+//     const comboItem = {
+//       name: 'Combo of 5 Fragrances',
+//       price: comboPrice,
+//       mrp: comboMRP,
+//       combo: allFlavors,
+//       id: Date.now(),
+//       quantity: 1
+//     };
 
-    // Clear existing cart and add combo
-    localStorage.setItem('cart', JSON.stringify([comboItem]));
+//     // Clear existing cart and add combo
+//     localStorage.setItem('cart', JSON.stringify([comboItem]));
     
-    // Dispatch custom event to notify navbar
-    window.dispatchEvent(new CustomEvent('cartUpdated'));
+//     // Dispatch custom event to notify navbar
+//     window.dispatchEvent(new CustomEvent('cartUpdated'));
     
-    // Navigate to checkout with order details
-    const orderDetails = {
-      productName: 'Combo of 5 Fragrances',
-      quantity: 1,
-      fragrances: allFlavors,
-      pricePerUnit: comboPrice,
-      totalAmount: comboPrice,
-      mainImage: combo4Image
-    };
+//     // Navigate to checkout with order details
+//     const orderDetails = {
+//       productName: 'Combo of 5 Fragrances',
+//       quantity: 1,
+//       fragrances: allFlavors,
+//       pricePerUnit: comboPrice,
+//       totalAmount: comboPrice,
+//       mainImage: combo4Image
+//     };
     
-    navigate('/checkout', { state: orderDetails });
-  };
+//     navigate('/checkout', { state: orderDetails });
+//   };
 
-  return (
-    <div id="new" className="">
-      <img src={banner} alt="Special Combo Offer" className="w-full" />
-      <div className=''>
-        {/* Content */}
-        <div className="md:w-full text-left">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5d3c77] mb-4">
-            ALL-In-One Fragrance Pack
-          </h2>
-          <p className="text-gray-700 text-lg leading-relaxed mb-6">
-            Unlock the power of purity, calmness, and style — all in one exclusive pack. Our <strong>5-in-1 Combo</strong> features all premium fragrances including <span className="text-[#5d3c77] font-semibold">Original Camphor</span> plus four handpicked fragrances.
-            <br /><br />
-            Just <strong>open the pack</strong> and place it in your wardrobe, bathroom, car, or any room — no water, no electricity, no setup needed.
-          </p>
+//   return (
+//     <div id="new" className="">
+//       <img src={banner} alt="Special Combo Offer" className="w-full" />
+//       <div className=''>
+//         {/* Content */}
+//         <div className="md:w-full text-left">
+//           <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5d3c77] mb-4">
+//             ALL-In-One Fragrance Pack
+//           </h2>
+//           <p className="text-gray-700 text-lg leading-relaxed mb-6">
+//             Unlock the power of purity, calmness, and style — all in one exclusive pack. Our <strong>5-in-1 Combo</strong> features all premium fragrances including <span className="text-[#5d3c77] font-semibold">Original Camphor</span> plus four handpicked fragrances.
+//             <br /><br />
+//             Just <strong>open the pack</strong> and place it in your wardrobe, bathroom, car, or any room — no water, no electricity, no setup needed.
+//           </p>
 
-          <ul className="list-disc list-inside text-sm text-gray-600 mb-6 space-y-1">
-            <li>Includes All 5 Premium Fragrances</li>
-            <li>Long-lasting freshness with anti-bacterial properties</li>
-            <li>No burning, no mess — 100% safe & natural</li>
-            <li>Perfect for gifting, travel, or daily use</li>
-          </ul>
+//           <ul className="list-disc list-inside text-sm text-gray-600 mb-6 space-y-1">
+//             <li>Includes All 5 Premium Fragrances</li>
+//             <li>Long-lasting freshness with anti-bacterial properties</li>
+//             <li>No burning, no mess — 100% safe & natural</li>
+//             <li>Perfect for gifting, travel, or daily use</li>
+//           </ul>
 
-          <button 
-            onClick={handleGrabCombo}
-            className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition"
-            >
-            Grab This Combo Now
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+//           <button 
+//             onClick={handleGrabCombo}
+//             className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition"
+//             >
+//             Grab This Combo Now
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+// const SpecialComboOffer = ({ navigate, flavorImages, flavorMRPs }) => {
+//   // const [showPopup, setShowPopup] = useState(false);
+//   const [showPopup, setShowPopup] = useState(false);
+//   console.log("Popup visibility:", showPopup);
+
+//   const handleConfirmPrepay = () => {
+//     const allFlavors = Object.keys(flavorImages);
+//     const comboPrice = 1399;
+//     const comboMRP = allFlavors.reduce((total, flavor) => total + flavorMRPs[flavor], 0);
+
+//     const comboItem = {
+//       name: 'Combo of 5 Fragrances',
+//       price: comboPrice,
+//       mrp: comboMRP,
+//       combo: allFlavors,
+//       id: Date.now(),
+//       quantity: 1
+//     };
+
+//     localStorage.setItem('cart', JSON.stringify([comboItem]));
+//     window.dispatchEvent(new CustomEvent('cartUpdated'));
+
+//     const orderDetails = {
+//       productName: 'Combo of 5 Fragrances',
+//       quantity: 1,
+//       fragrances: allFlavors,
+//       pricePerUnit: comboPrice,
+//       totalAmount: comboPrice,
+//       mainImage: combo4Image
+//     };
+
+//     navigate('/checkout', { state: orderDetails });
+//   };
+
+//   return (
+//     <div id="new" className="relative">
+//       <img src={banner} alt="Special Combo Offer" className="w-full" />
+
+//       <div className=''>
+//         <div className="md:w-full text-left">
+//           <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5d3c77] mb-4">
+//             ALL-In-One Fragrance Pack
+//           </h2>
+//           <p className="text-gray-700 text-lg leading-relaxed mb-6">
+//             Unlock the power of purity, calmness, and style — all in one exclusive pack. Our <strong>5-in-1 Combo</strong> features all premium fragrances including <span className="text-[#5d3c77] font-semibold">Original Camphor</span> plus four handpicked fragrances.
+//             <br /><br />
+//             Just <strong>open the pack</strong> and place it in your wardrobe, bathroom, car, or any room — no water, no electricity, no setup needed.
+//           </p>
+
+//           <ul className="list-disc list-inside text-sm text-gray-600 mb-6 space-y-1">
+//             <li>Includes All 5 Premium Fragrances</li>
+//             <li>Long-lasting freshness with anti-bacterial properties</li>
+//             <li>No burning, no mess — 100% safe & natural</li>
+//             <li>Perfect for gifting, travel, or daily use</li>
+//           </ul>
+
+//           <button 
+//             onClick={() => setShowPopup(true)}
+//             className="bg-gradient-to-r from-[#5d3c77] to-[#8a62ac] text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition"
+//           >
+//             Grab This Combo Now
+//           </button>
+//         </div>
+//       </div>
+//       {showPopup && (
+//         <div className="fixed inset-0 z-[9999] bg-black bg-opacity-50 flex justify-center items-center">
+//           <div className="bg-white rounded-lg shadow-xl p-6 max-w-md text-center">
+//             <h3 className="text-lg font-semibold mb-2">🎉 Special Offer</h3>
+//             <p className="text-gray-700 mb-4">Get <strong>Free Shipping</strong> on Prepaid Orders!</p>
+//             <div className="flex justify-center gap-4">
+//               <button
+//                 onClick={handleConfirmPrepay}
+//                 className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+//               >
+//                 Continue with Prepay
+//               </button>
+//               <button
+//                 onClick={() => setShowPopup(false)}
+//                 className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+//               >
+//                 Cancel
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+      
+//     </div>
+//   );
+// };
+
+
+
+
 
 
 
@@ -726,7 +821,7 @@ const DisplayCards = () => {
       <ReviewsSlider />
       {/* Special Combo of 4 Section */}
       <div>
-        <SpecialComboOffer navigate={navigate} />
+        <SpecialComboOffer navigate={navigate} flavorImages={flavorImages} flavorMRPs={flavorMRPs} />
       </div>
     </div>
   );
