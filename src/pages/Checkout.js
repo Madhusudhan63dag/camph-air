@@ -4,7 +4,7 @@ import { FaLock, FaShieldAlt, FaCreditCard, FaCheckCircle, FaRegCreditCard } fro
 import { SiRazorpay } from 'react-icons/si';
 
 // API Configuration
-const API_BASE_URL = "https://camph-air-api.onrender.com" || 'http://localhost:5000';
+const API_BASE_URL = "http://localhost:5000" || 'http://localhost:5000';
 
 // https://camph-air-api.onrender.com
 
@@ -440,155 +440,259 @@ const PaymentMethodSelector = ({ selectedMethod, onSelect }) => {
     );
 };
 
-// Searchable Dropdown Component for Cities
-const SearchableDropdown = ({ value, onChange, options, placeholder, error, name }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredOptions, setFilteredOptions] = useState(options);
-    const dropdownRef = useRef(null);
+// Add OTP Verification Component
+const OTPVerification = ({ phoneNumber, onVerificationSuccess, onCancel }) => {
+    const [otp, setOtp] = useState('');
+    const [isGeneratingOtp, setIsGeneratingOtp] = useState(false);
+    const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpError, setOtpError] = useState('');
+    const [resendTimer, setResendTimer] = useState(0);
 
-    // Filter options based on search term
     useEffect(() => {
-        if (searchTerm) {
-            const filtered = options.filter(option =>
-                option.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFilteredOptions(filtered);
-        } else {
-            setFilteredOptions(options);
+        if (resendTimer > 0) {
+            const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+            return () => clearTimeout(timer);
         }
-    }, [searchTerm, options]);
+    }, [resendTimer]);
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
+    const generateOTP = async () => {
+        setIsGeneratingOtp(true);
+        setOtpError('');
+        
+        try {
+            const response = await apiCall('/generate-otp', {
+                method: 'POST',
+                body: JSON.stringify({
+                    phoneNumber: phoneNumber
+                })
+            });
+
+            if (response.success) {
+                setOtpSent(true);
+                setResendTimer(60); // 60 seconds countdown
+                console.log('OTP sent successfully');
+            } else {
+                setOtpError(response.message || 'Failed to send OTP');
             }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const handleSelect = (option) => {
-        onChange({ target: { name, value: option } });
-        setIsOpen(false);
-        setSearchTerm('');
-    };
-
-    const handleInputClick = () => {
-        setIsOpen(!isOpen);
-    };
-
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-        if (!isOpen) setIsOpen(true);
-    };
-
-    const handleCustomCitySelect = () => {
-        if (searchTerm.trim()) {
-            onChange({ target: { name, value: searchTerm.trim() } });
-            setIsOpen(false);
-            setSearchTerm('');
+        } catch (error) {
+            console.error('Error generating OTP:', error);
+            setOtpError('Failed to send OTP. Please try again.');
+        } finally {
+            setIsGeneratingOtp(false);
         }
+    };
+
+    const verifyOTP = async () => {
+        if (!otp || otp.length !== 4) {
+            setOtpError('Please enter a valid 4-digit OTP');
+            return;
+        }
+
+        setIsVerifyingOtp(true);
+        setOtpError('');
+
+        try {
+            const response = await apiCall('/verify-otp', {
+                method: 'POST',
+                body: JSON.stringify({
+                    phoneNumber: phoneNumber,
+                    otp: otp
+                })
+            });
+
+            if (response.success) {
+                onVerificationSuccess();
+            } else {
+                setOtpError(response.message || 'Invalid OTP');
+            }
+        } catch (error) {
+            console.error('Error verifying OTP:', error);
+            setOtpError('Failed to verify OTP. Please try again.');
+        } finally {
+            setIsVerifyingOtp(false);
+        }
+    };
+
+    const handleOtpChange = (e) => {
+        const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+        setOtp(value);
+        if (otpError) setOtpError('');
     };
 
     return (
-        <div className="relative" ref={dropdownRef}>
-            <div
-                className={`block w-full rounded-md shadow-sm 
-                    focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 
-                    border ${error ? 'border-red-500' : 'border-gray-300'} 
-                    transition-all duration-200 hover:border-blue-400
-                    focus-within:shadow-lg transform hover:scale-[1.01]
-                    font-['Inter',sans-serif] cursor-pointer bg-white`}
-                onClick={handleInputClick}
-            >
-                <div className="flex items-center justify-between p-3">
-                    <span className={`${value ? 'text-gray-900' : 'text-gray-500'} text-sm`}>
-                        {value || placeholder}
-                    </span>
-                    <svg 
-                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+        <div style={modalStyles.overlay}>
+            <div style={{...modalStyles.content, maxWidth: '450px'}}>
+                <div className="text-center mb-6">
+                    <div className="bg-green-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Phone Verification</h2>
+                    <p className="text-gray-600 mb-4">
+                        {!otpSent 
+                            ? `We'll send a verification code to ${phoneNumber}`
+                            : `Enter the 4-digit code sent to ${phoneNumber}`
+                        }
+                    </p>
                 </div>
-            </div>
 
-            {isOpen && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-hidden">
-                    {/* Search Input */}
-                    <div className="p-3 border-b border-gray-200 bg-gray-50">
-                        <div className="relative">
+                {!otpSent ? (
+                    <div className="space-y-4">
+                        <button
+                            onClick={generateOTP}
+                            disabled={isGeneratingOtp}
+                            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg
+                                    shadow-lg transition-all duration-300 transform hover:scale-[1.02]
+                                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 
+                                    flex items-center justify-center"
+                        >
+                            {isGeneratingOtp ? (
+                                <div className="flex items-center justify-center">
+                                    <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                    </svg>
+                                    Sending OTP...
+                                </div>
+                            ) : (
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                    Send OTP
+                                </>
+                            )}
+                        </button>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Enter 4-digit OTP
+                            </label>
                             <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={handleSearchChange}
-                                placeholder="Search or type city name..."
-                                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                autoFocus
+                                type="tel"
+                                value={otp}
+                                onChange={handleOtpChange}
+                                placeholder="Enter OTP"
+                                maxLength="4"
+                                className="block w-full text-center text-2xl font-bold tracking-widest rounded-lg border border-gray-300 px-4 py-3
+                                        focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
+                                autoComplete="one-time-code"
                             />
-                            <svg
-                                className="absolute left-3 top-2.5 w-4 h-4 text-gray-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+                        </div>
+
+                        <button
+                            onClick={verifyOTP}
+                            disabled={isVerifyingOtp || otp.length !== 4}
+                            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg
+                                    shadow-lg transition-all duration-300 transform hover:scale-[1.02]
+                                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 
+                                    flex items-center justify-center"
+                        >
+                            {isVerifyingOtp ? (
+                                <div className="flex items-center justify-center">
+                                    <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                    </svg>
+                                    Verifying...
+                                </div>
+                            ) : (
+                                <>
+                                    <FaCheckCircle className="mr-2" />
+                                    Verify OTP
+                                </>
+                            )}
+                        </button>
+
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Didn't receive OTP?</span>
+                            {resendTimer > 0 ? (
+                                <span className="text-gray-500">Resend in {resendTimer}s</span>
+                            ) : (
+                                <button
+                                    onClick={generateOTP}
+                                    disabled={isGeneratingOtp}
+                                    className="text-green-600 hover:text-green-700 font-medium disabled:opacity-50"
+                                >
+                                    Resend OTP
+                                </button>
+                            )}
                         </div>
                     </div>
+                )}
 
-                    {/* Options List */}
-                    <div className="max-h-40 overflow-y-auto">
-                        {filteredOptions.length > 0 ? (
-                            filteredOptions.map((option, index) => (
-                                <div
-                                    key={index}
-                                    onClick={() => handleSelect(option)}
-                                    className="px-4 py-3 text-sm hover:bg-blue-50 cursor-pointer transition-colors duration-150 border-b border-gray-100 last:border-b-0"
-                                >
-                                    <div className="flex items-center">
-                                        <svg className="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        <span className="text-gray-800">{option}</span>
-                                    </div>
-                                </div>
-                            ))
-                        ) : searchTerm.trim() ? (
-                            /* Custom city option when no matches found */
-                            <div
-                                onClick={handleCustomCitySelect}
-                                className="px-4 py-3 text-sm hover:bg-green-50 cursor-pointer transition-colors duration-150 border-b border-gray-100"
-                            >
-                                <div className="flex items-center">
-                                    <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                    <div>
-                                        <span className="text-gray-800 font-medium">Use "{searchTerm}"</span>
-                                        <div className="text-xs text-gray-500 mt-1">Click to select this custom city</div>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="px-4 py-3 text-sm text-gray-500 text-center">
-                                <svg className="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                                Start typing to search cities
-                            </div>
-                        )}
+                {otpError && (
+                    <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-center text-sm border border-red-200">
+                        {otpError}
                     </div>
+                )}
+
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                    <button
+                        onClick={onCancel}
+                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg
+                                transition-all duration-200"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Add SearchableDropdown component
+const SearchableDropdown = ({ name, value, onChange, options, placeholder, error }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(value || '');
+    
+    const filteredOptions = options.filter(option =>
+        option.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSelect = (option) => {
+        setSearchTerm(option);
+        onChange({ target: { name, value: option } });
+        setIsOpen(false);
+    };
+
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+        onChange({ target: { name, value: e.target.value } });
+        setIsOpen(true);
+    };
+
+    return (
+        <div className="relative">
+            <input
+                type="text"
+                value={searchTerm}
+                onChange={handleInputChange}
+                onFocus={() => setIsOpen(true)}
+                onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+                placeholder={placeholder}
+                className={`block w-full rounded-md shadow-sm 
+                    focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                    border ${error ? 'border-red-500' : 'border-gray-300'} 
+                    p-3 transition-all duration-200 hover:border-blue-400
+                    focus:shadow-lg transform focus:scale-[1.01]
+                    font-['Inter',sans-serif]`}
+            />
+            {isOpen && filteredOptions.length > 0 && (
+                <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredOptions.slice(0, 10).map((option) => (
+                        <div
+                            key={option}
+                            onClick={() => handleSelect(option)}
+                            className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                        >
+                            {option}
+                        </div>
+                    ))}
                 </div>
             )}
         </div>
@@ -679,6 +783,8 @@ const Checkout = () => {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [formComplete, setFormComplete] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('razorpay'); // Default to Razorpay
+    const [showOtpVerification, setShowOtpVerification] = useState(false);
+    const [isPhoneVerified, setIsPhoneVerified] = useState(false);
     const paymentSectionRef = useRef(null);
     const formColumnRef = useRef(null); // Add ref for the form column
     const orderSummaryRef = useRef(null); // Add ref for the order summary column
@@ -698,6 +804,11 @@ const Checkout = () => {
     });
 
     const [formErrors, setFormErrors] = useState({});
+
+    // Add missing handlePaymentMethodSelect function
+    const handlePaymentMethodSelect = (method) => {
+        setPaymentMethod(method);
+    };
 
     // Helper function to calculate shipping charge based on payment method
     const getCurrentShippingCharge = () => {
@@ -792,23 +903,6 @@ const Checkout = () => {
                         </div>
                     </div>
                 )}
-
-                {/* Selected Fragrances - Only show for single products */}
-                {/* {!orderDetails?.isBundle && orderDetails?.fragrances && orderDetails.fragrances.length > 0 && (
-                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-100">
-                        <h4 className="font-semibold text-gray-800 mb-2">Selected Fragrances:</h4>
-                        <div className="space-y-1">
-                            {orderDetails.fragrances.map((fragrance, index) => (
-                                <div key={index} className="flex justify-between text-sm">
-                                    <span className="text-gray-600">Fragrance {index + 1}:</span>
-                                    <span className="font-medium text-gray-800 bg-white px-2 py-1 rounded-full text-xs">
-                                        {fragrance}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )} */}
 
                 {/* Pricing */}
                 <div className="space-y-2">
@@ -1146,7 +1240,7 @@ const handleSubmit = async (e) => {
             setCurrentStep(2); // Update progress bar
             setIsSubmitting(false);
             
-            // Track potential abandoned order
+            // Track abandoned order
             trackAbandonedOrder();
             
             // Add smooth scroll to payment section
@@ -1179,6 +1273,8 @@ const handleRazorpayPayment = async () => {
             method: 'POST',
             body: JSON.stringify({
                 amount: totalAmount,
+
+
                 currency: 'INR',
                 receipt: `camph_order_${Date.now()}`,
                 notes: {
@@ -1282,7 +1378,7 @@ const handleRazorpayPayment = async () => {
                         const response = await fetch(`${API_BASE_URL}/send-abandoned-order-email`, {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
                                 customerEmail: formData.email,
@@ -1315,7 +1411,7 @@ const handleRazorpayPayment = async () => {
     }
 };
 
-const handleCodOrder = async () => {
+const handleCodOrderAfterVerification = async () => {
     setIsSubmitting(true);
     try {
         // Simulate processing time
@@ -1324,9 +1420,9 @@ const handleCodOrder = async () => {
         // Create mock payment details for COD
         const paymentDetails = {
             id: `COD-${Date.now()}`,
-            status: 'Pending',
+            status: 'Confirmed',
             update_time: new Date().toISOString(),
-            payment_method: 'Cash On Delivery'
+            payment_method: 'Cash On Delivery (Phone Verified)'
         };
         
         onPaymentSuccess(paymentDetails);
@@ -1340,8 +1436,30 @@ const handleCodOrder = async () => {
     }
 };
 
-const handlePaymentMethodSelect = (method) => {
-    setPaymentMethod(method);
+const handleCodOrder = async () => {
+    // Check if phone is verified for COD
+    if (!isPhoneVerified) {
+        setShowOtpVerification(true);
+        return;
+    }
+
+    // If already verified, proceed directly
+    handleCodOrderAfterVerification();
+};
+
+// Handle OTP verification success
+const handleOtpVerificationSuccess = () => {
+    setIsPhoneVerified(true);
+    setShowOtpVerification(false);
+    
+    // Automatically proceed with COD order after verification
+    // Remove the setTimeout and directly call the order processing
+    handleCodOrderAfterVerification();
+};
+
+// Handle OTP verification cancel
+const handleOtpVerificationCancel = () => {
+    setShowOtpVerification(false);
 };
 
 const onPaymentSuccess = async (order) => {
@@ -1819,7 +1937,7 @@ const onPaymentSuccess = async (order) => {
                                             100% Money Back Guarantee
                                         </p>
                                     </div>
-                                    <p className="text-blue-600 text-sm mt-1 ml-6">
+                                    <p className="text-blue-600 text-sm mt-1 ml-6 mb-2">
                                         15-day satisfaction guarantee or your money back
                                     </p>
                                 </div>
@@ -1914,9 +2032,30 @@ const onPaymentSuccess = async (order) => {
                                                     </svg>
                                                     <span className="font-medium">Cash on Delivery Information</span>
                                                 </div>
-                                                <p className="text-yellow-700 text-sm ml-7">
+                                                <p className="text-yellow-700 text-sm mt-1 ml-7 mb-2">
                                                     Pay with cash upon delivery. Our delivery agent will collect the payment when your order arrives. A shipping charge of ₹50 applies for COD orders.
                                                 </p>
+                                                {!isPhoneVerified && (
+                                                    <div className="bg-orange-100 border border-orange-300 rounded-lg p-3 ml-7">
+                                                        <div className="flex items-center text-orange-800 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                            </svg>
+                                                            <span className="font-medium text-sm">Phone Verification Required</span>
+                                                        </div>
+                                                        <p className="text-orange-700 text-xs">
+                                                            We'll verify your phone number with OTP before confirming your COD order.
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                {isPhoneVerified && (
+                                                    <div className="bg-green-100 border border-green-300 rounded-lg p-3 ml-7">
+                                                        <div className="flex items-center text-green-800">
+                                                            <FaCheckCircle className="mr-2 text-sm" />
+                                                            <span className="font-medium text-sm">Phone Verified Successfully</span>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                             
                                             <button
@@ -1937,11 +2076,22 @@ const onPaymentSuccess = async (order) => {
                                                     </div>
                                                 ) : (
                                                     <>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                                                            <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
-                                                        </svg>
-                                                        Place Order - ₹ {(orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2)}
+                                                        {!isPhoneVerified ? (
+                                                            <>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                                </svg>
+                                                                Verify Phone & Place Order - ₹ {(orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2)}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                                                                    <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+                                                                </svg>
+                                                                Place Order - ₹ {(orderDetails.totalAmount + getCurrentShippingCharge()).toFixed(2)}
+                                                            </>
+                                                        )}
                                                     </>
                                                 )}
                                             </button>
@@ -1983,6 +2133,15 @@ const onPaymentSuccess = async (order) => {
                 </div>
             </div>
 
+            {/* OTP Verification Modal */}
+            {showOtpVerification && (
+                <OTPVerification
+                    phoneNumber={formData.phone}
+                    onVerificationSuccess={handleOtpVerificationSuccess}
+                    onCancel={handleOtpVerificationCancel}
+                />
+            )}
+
             {/* Success Message Modal */}
             {paymentSuccess && (
                 <div style={modalStyles.overlay}>
@@ -1991,10 +2150,13 @@ const onPaymentSuccess = async (order) => {
                             <FaCheckCircle className="text-green-600 text-4xl" />
                         </div>
                         <h2 className="text-3xl font-bold text-gray-800 mb-4 tracking-tight">
-                            Payment Successful!
+                            {paymentMethod === 'cod' ? 'Order Confirmed!' : 'Payment Successful!'}
                         </h2>
                         <p className="text-gray-600 mb-6 max-w-md mx-auto leading-relaxed">
-                            Thank you for your order! We've sent a confirmation email with your order details.
+                            {paymentMethod === 'cod' 
+                                ? 'Your COD order has been confirmed! We\'ll contact you before delivery.'
+                                : 'Thank you for your order! We\'ve sent a confirmation email with your order details.'
+                            }
                         </p>
                         <div className="flex items-center justify-center mb-4">
                             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mr-2"></div>

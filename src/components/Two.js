@@ -31,13 +31,30 @@ import SpecialComboOffer from './SpecialComboOffer';
 
 const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => {
   const [selectedPacks, setSelectedPacks] = useState({}); // { "Lavender": 1, ... }
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const handlePackSelect = (flavor, count) => {
     setSelectedPacks((prev) => ({ ...prev, [flavor]: count }));
   };
 
+  const showThankYouMessage = () => {
+    setShowThankYou(true);
+    setTimeout(() => setShowThankYou(false), 1000); // Hide after 2 seconds
+  };
+
   return (
-    <div className="w-full max-w-screen-xl mx-auto px-4 py-10">
+    <div className="relative w-full max-w-screen-xl mx-auto px-4 py-10">
+      {/* Thank You Popup */}
+      {showThankYou && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4 text-center animate-bounce">
+            <div className="text-green-600 text-4xl mb-3">✓</div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Thank You!</h3>
+            <p className="text-gray-600">Item successfully added to cart</p>
+          </div>
+        </div>
+      )}
+
       <Swiper
         navigation
         modules={[Navigation]}
@@ -133,6 +150,7 @@ const SinglePackSlider = ({ packs, flavorImages, flavorMRPs, flavorPrices }) => 
 
                       localStorage.setItem("cart", JSON.stringify(cart));
                       window.dispatchEvent(new CustomEvent("cartUpdated"));
+                      showThankYouMessage(); // Show thank you popup
                     }}
                   >
                     ADD TO CART
@@ -251,13 +269,30 @@ const flavors = Object.keys(flavorImages);
 
 const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => {
   const [comboQuantities, setComboQuantities] = useState({}); // { 'Original + Lavender': 2 }
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const handleComboSelect = (name, count) => {
     setComboQuantities((prev) => ({ ...prev, [name]: count }));
   };
 
+  const showThankYouMessage = () => {
+    setShowThankYou(true);
+    setTimeout(() => setShowThankYou(false), 1000); // Hide after 2 seconds
+  };
+
   return (
-    <div className="w-full px-4 py-5">
+    <div className="relative w-full px-4 py-5">
+      {/* Thank You Popup */}
+      {showThankYou && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4 text-center animate-bounce">
+            <div className="text-green-600 text-4xl mb-3">✓</div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Thank You!</h3>
+            <p className="text-gray-600">Combo successfully added to cart</p>
+          </div>
+        </div>
+      )}
+
       <Swiper
         navigation
         modules={[Navigation]}
@@ -344,6 +379,7 @@ const ComboPackSlider = ({ packs, flavorImages, flavorPrices, flavorMRPs }) => {
 
                       localStorage.setItem("cart", JSON.stringify(cart));
                       window.dispatchEvent(new CustomEvent("cartUpdated"));
+                      showThankYouMessage(); // Show thank you popup
                     }}
                     className="bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-700 mt-auto transition"
                   >

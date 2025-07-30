@@ -5,7 +5,7 @@ const Privacy = () => {
     <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800">
       <h1 className="text-3xl font-bold mb-6 text-[#5d3c77]">Privacy Policy</h1>
 
-      <p className="text-sm text-gray-500 mb-8">Last Updated: JULY 2025</p>
+      {/* <p className="text-sm text-gray-500 mb-8">Last Updated: JULY 2025</p> */}
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Information We Collect</h2>
       <p className="mb-4">
