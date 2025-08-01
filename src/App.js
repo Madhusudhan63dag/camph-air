@@ -16,6 +16,7 @@ import Return from './pages/Return';
 import Shipping from './pages/Shipping';
 import Thankyou from './pages/Thankyou';
 import Six from './components/Six';
+import ContactUs from './pages/Contact';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -92,6 +93,7 @@ function App() {
           <Route path="/returns" element={<Return />} />
           <Route path="/shipping" element={<Shipping />} />
           <Route path="/thank-you" element={<Thankyou />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
         <Footer />
       </BrowserRouter>

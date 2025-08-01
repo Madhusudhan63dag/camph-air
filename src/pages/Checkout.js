@@ -4,7 +4,7 @@ import { FaLock, FaShieldAlt, FaCreditCard, FaCheckCircle, FaRegCreditCard } fro
 import { SiRazorpay } from 'react-icons/si';
 
 // API Configuration
-const API_BASE_URL = "http://localhost:5000" || 'http://localhost:5000';
+const API_BASE_URL = "https://camph-air-api.onrender.com" || 'http://localhost:5000';
 
 // https://camph-air-api.onrender.com
 
@@ -1089,6 +1089,94 @@ const sendOrderConfirmationEmail = async (paymentDetails) => {
         return false;
     }
 };
+ 
+// Updated WhatsApp confirmation function
+const sendWhatsAppConfirmation = async (orderData, customerData) => {
+    try {
+        // Format customer phone number for WhatsApp (ensure it starts with country code)
+        let whatsappNumber = customerData.phone;
+        
+        // Add country code if not present (assuming India +91)
+        if (!whatsappNumber.startsWith('+')) {
+            whatsappNumber = '+91' + whatsappNumber;
+        }
+        
+        // Prepare order details for WhatsApp message
+        const productInfo = orderData.isBundle 
+            ? `Bundle: ${orderData.cartItems?.map(item => item.name).join(', ') || orderData.productName}`
+            : orderData.productName;
+            
+        // Get the correct total amount (this already includes shipping charges from onPaymentSuccess)
+        const totalAmount = orderData.totalAmount;
+        
+        // Create the WhatsApp confirmation message with correct format
+        const confirmationMessage = `🎉 Order Confirmed! 
+
+Hello ${customerData.firstName} ${customerData.lastName}!
+
+Your order #${orderData.orderNumber || generateOrderNumber()} has been confirmed.
+
+📦 Product: ${productInfo}
+💰 Total: ₹${totalAmount.toFixed(2)}
+💳 Payment: ${orderData.paymentMethod || 'Online Payment'}
+
+Thank you for choosing Camph Air! We'll process your order and keep you updated.
+
+For any queries, reply to this message.`;
+
+        console.log('Sending WhatsApp confirmation message to:', whatsappNumber);
+        console.log('Message content:', confirmationMessage);
+        
+        try {
+            // Try to send WhatsApp template message first (if you have a template)
+            const templateResponse = await apiCall('/whatsendconfirmation', {
+                method: 'POST',
+                body: JSON.stringify({
+                    recipient: whatsappNumber,
+                    templateId: 'order_confirmation',
+                    bodyVariables: [
+                        `${customerData.firstName} ${customerData.lastName}`, // Customer name
+                        orderData.orderNumber || generateOrderNumber(), // Order number
+                        productInfo, // Product name
+                        `₹${totalAmount.toFixed(2)}`, // Total amount with correct charges
+                        orderData.paymentMethod || 'Online Payment' // Payment method
+                    ]
+                })
+            });
+            
+            if (templateResponse.success) {
+                console.log('WhatsApp template confirmation sent successfully');
+                return true;
+            } else {
+                throw new Error('Template message failed: ' + (templateResponse.message || 'Unknown error'));
+            }
+        } catch (templateError) {
+            console.log('WhatsApp template failed, using text message:', templateError.message);
+            
+            // Fallback to text message
+            const textResponse = await apiCall('/whatsendtext', {
+                method: 'POST',
+                body: JSON.stringify({
+                    recipient: whatsappNumber,
+                    message: confirmationMessage,
+                    callbackData: `order_${orderData.orderNumber || generateOrderNumber()}`
+                })
+            });
+            
+            if (textResponse.success) {
+                console.log('WhatsApp text message confirmation sent successfully');
+                return true;
+            } else {
+                throw new Error('Text message failed');
+            }
+        }
+        
+    } catch (error) {
+        console.error('WhatsApp confirmation error:', error);
+        // Don't fail the entire process if WhatsApp fails
+        return false;
+    }
+};
 
 const trackAbandonedOrder = () => {
     if (formData.email) {
@@ -1483,7 +1571,7 @@ const onPaymentSuccess = async (order) => {
         console.warn("Failed to send confirmation email");
     }
 
-    // Prepare order data for thank you page
+    // Prepare order data for thank you page and WhatsApp
     const orderData = {
         orderNumber: generateOrderNumber(),
         orderDate: new Date().toLocaleDateString('en-IN'),
@@ -1495,20 +1583,40 @@ const onPaymentSuccess = async (order) => {
         customerName: `${formData.firstName} ${formData.lastName}`,
         customerEmail: formData.email,
         customerPhone: formData.phone,
-        shippingAddress: `${formData.flatHouseBuilding}, ${formData.address}${formData.landmark ? ', Near ' + formData.landmark : ''}\n${formData.city}${formData.town ? ', ' + formData.town : ''} - ${formData.pincode}\n${formData.country}`
+        shippingAddress: `${formData.flatHouseBuilding}, ${formData.address}${formData.landmark ? ', Near ' + formData.landmark : ''}\n${formData.city}${formData.town ? ', ' + formData.town : ''} - ${formData.pincode}\n${formData.country}`,
+        // Include order details for WhatsApp
+        isBundle: orderDetails.isBundle,
+        cartItems: orderDetails.cartItems
     };
 
-        // Store order data for thank you page
-        localStorage.setItem('camphAirOrderSuccess', JSON.stringify(orderData));
-        
-        // Navigate to thank you page after a short delay
-        setTimeout(() => {
-            navigate('/thank-you', { 
-                state: orderData,
-                replace: true 
-            });
-        }, 2000); // 2 second delay to show success state
+    // Send WhatsApp confirmation
+    const whatsappSent = await sendWhatsAppConfirmation(orderData, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone
+    });
+
+    if (!whatsappSent) {
+        console.warn("Failed to send WhatsApp confirmation");
+    }
+
+    // Store order data for thank you page (include WhatsApp status)
+    const orderDataWithStatus = {
+        ...orderData,
+        emailSent,
+        whatsappSent
     };
+    
+    localStorage.setItem('camphAirOrderSuccess', JSON.stringify(orderDataWithStatus));
+    
+    // Navigate to thank you page after a short delay
+    setTimeout(() => {
+        navigate('/thank-you', { 
+            state: orderDataWithStatus,
+            replace: true 
+        });
+    }, 2000); // 2 second delay to show success state
+};
 
     useEffect(() => {
         // Scroll to top when component mounts

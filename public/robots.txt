@@ -1,3 +1,21 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap location
+Sitemap: https://camphairr.com/sitemap.xml
+
+# Block checkout process from being indexed
+Disallow: /checkout
+Disallow: /thank-you
+
+# Allow all other pages
+Allow: /
+Allow: /terms
+Allow: /privacy
+Allow: /returns
+Allow: /shipping
+Allow: /cancellation
+
+# Crawl delay (optional)
+Crawl-delay: 1

@@ -1,0 +1,153 @@
+# Camph Airr - E-commerce React Application
+
+## Project Overview
+Camph Airr is a React-based e-commerce website specializing in natural camphor fragrance products. The application features a modern, responsive design with integrated payment processing, cart functionality, and email notifications.
+
+## Technology Stack
+- **Frontend**: React 18 with functional components and hooks
+- **Routing**: React Router DOM
+- **Styling**: Tailwind CSS with custom gradients and animations
+- **UI Components**: Custom components with React Icons
+- **Carousel**: React Slick for testimonials and product displays
+- **Payment**: Razorpay integration for online payments
+- **State Management**: React useState and useEffect hooks with localStorage
+- **Forms**: Custom form validation and handling
+
+## Project Structure
+
+### Core Components (`src/components/`)
+- **Navbar.js**: Navigation bar with cart integration and mobile menu
+- **Footer.js**: Footer with social links and company information
+- **Cart.js**: Shopping cart modal with add/remove functionality
+- **ScrollToTop.js**: Utility component for scroll behavior
+- **One.js**: Hero/banner section
+- **Two.js**: Product showcase section
+- **Three.js**: (Currently commented out)
+- **Four.js**: Features/benefits section
+- **Five.js**: Product selection and ordering
+- **Six.js**: Customer testimonials carousel
+
+### Pages (`src/pages/`)
+- **Checkout.js**: Complete checkout flow with form validation, payment integration
+- **Thankyou.js**: Order confirmation page
+- **Terms.js**: Terms and conditions
+- **Privacy.js**: Privacy policy
+- **Return.js**: Return policy
+- **Shipping.js**: Shipping information
+- **Cancellation.js**: Cancellation policy
+
+### Key Features
+
+#### Shopping Cart System
+- Add products to cart with fragrance selections
+- Local storage persistence
+- Real-time cart count updates
+- Remove individual items or clear cart
+- Proceeds to checkout with cart data
+
+#### Checkout Process
+- Multi-step checkout with progress indicator
+- Comprehensive form validation
+- Address validation with Indian cities dropdown
+- Phone number validation with OTP verification for COD
+- Payment method selection (Razorpay/COD)
+- Order confirmation emails
+
+#### Payment Integration
+- Razorpay payment gateway integration
+- Cash on Delivery (COD) with phone verification
+- Payment verification and order processing
+- Abandoned cart recovery emails
+
+#### Product System
+- Fragrance selection with combo options
+- Dynamic pricing based on selections
+- Product images and descriptions
+- Multiple fragrance combinations
+
+## API Integration
+The application integrates with a Node.js backend API for:
+- Email notifications (order confirmations, abandoned carts)
+- Payment processing (Razorpay order creation and verification)
+- OTP generation and verification for COD orders
+
+### API Endpoints
+- POST /send-order-confirmation
+- POST /send-abandoned-order-email
+- POST /create-order
+- POST /verify-payment
+- POST /generate-otp
+- POST /verify-otp
+
+## Data Models
+
+### Order Structure
+```javascript
+{
+  orderNumber: string,
+  productName: string,
+  quantity: number,
+  totalAmount: number,
+  paymentMethod: string,
+  transactionId: string,
+  customerDetails: {
+    firstName, lastName, email, phone,
+    address, city, pincode, country
+  }
+}
+```
+
+### Cart Item Structure
+```javascript
+{
+  name: string,
+  price: number,
+  combo: array of fragrance names,
+  image: string (optional)
+}
+```
+
+## Styling Approach
+- Tailwind CSS for utility-first styling
+- Custom color palette: Primary purple (#5d3c77), gradients
+- Responsive design with mobile-first approach
+- Custom animations and transitions
+- Consistent spacing and typography
+
+## State Management
+- React hooks for local component state
+- localStorage for cart persistence
+- Custom events for cross-component communication
+- Form state management with validation
+
+## Notable Features
+- Progressive form validation
+- Real-time cart updates
+- Smooth scrolling navigation
+- Responsive image handling
+- SEO-optimized meta tags
+- Abandoned cart recovery
+- Order tracking and confirmation
+
+## Development Patterns
+- Functional components with hooks
+- Custom utility functions for common operations
+- Modular component architecture
+- Reusable form validation logic
+- Event-driven cart updates
+- Error handling and user feedback
+
+## Deployment Considerations
+- Environment variables for API URLs
+- Production build optimization
+- SEO meta tags and sitemap
+- Performance optimizations with lazy loading
+
+## Business Logic
+- Single product focus with fragrance variations
+- Combo pricing system
+- Regional targeting (primarily India)
+- Email marketing integration
+- Customer support contact information
+
+This application represents a complete e-commerce solution with modern React practices, integrated payment processing, and comprehensive user experience features.

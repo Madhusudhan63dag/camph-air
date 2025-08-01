@@ -248,7 +248,7 @@ const flavorImages = {
 };
 
 const flavorPrices = {
-  Lavender: 199,
+  Lavender: 10,
   Lemongrass: 199,
   Sandalwood: 199,
   Original: 199,
