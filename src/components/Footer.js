@@ -80,7 +80,7 @@ const Footer = () => (
     </div>
     {/* Divider */}
     <div className="border-t mt-10 pt-4 text-center text-xs text-gray-500">
-      © {new Date().getFullYear()} Camph Airr. All rights reserved.
+      © {new Date().getFullYear()} Surya Media. All rights reserved.
     </div>
   </footer>
 );
